@@ -1,0 +1,221 @@
+{% extends 'base_auth.html' %}
+
+{% block content %}
+
+<div class="container-fluid" style="background-color: #bff6ff">
+    <div class="container vh-100">
+    <div class="d-flex align-items-center justify-content-center vh-100">
+        <section class="card w-100 rounded-4">
+    <div class="card-body d-flex align-items-center">
+    <!-- LEFT -->
+    <div class="illustration" style="height: stretch">
+      <div class="shapes">
+
+        <div class="shape purple happy">
+          <div class="eyes no-pupil">
+            <span></span><span></span>
+          </div>
+          <div class="mouth"></div>
+        </div>
+
+        <div class="shape dark">
+          <div class="eyes dark-eyes">
+            <span></span><span></span>
+          </div>
+        </div>
+
+        <!-- AMARILLO CON 2 OJOS -->
+        <div class="shape yellow">
+            <div class="eyes orange-eyes"><span></span><span></span></div>
+          <span class="mouth big"></span>
+        </div>
+
+        <div class="shape orange">
+          <div class="eyes orange-eyes">
+            <span></span><span></span>
+          </div>
+          <div class="mouth big"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-container">
+      <div class="form-box">
+
+        <div class="header">
+          <!-- SVG QUITADO → IMAGEN -->
+
+          <h1>Welcome</h1>
+          <p>Please enter your details</p>
+        </div>
+
+<form method="post">
+    {% csrf_token %}
+<!--          <div class="field">-->
+<!--            <label>Email</label>-->
+
+<!--            <input id="email" type="email" placeholder="Enter your email" required>-->
+<!--              -->
+<!--          </div>-->
+        <div class="field">
+
+        <label>Email</label>
+
+        {{ form.username }}
+
+    </div>
+
+<!--          <div class="field">-->
+<!--            <label>Password</label>-->
+<!--            <div class="password">-->
+<!--              <input id="password" type="password" placeholder="••••••••" required>-->
+<!--              <button type="button">-->
+<!--                <span class="material-icons-outlined">visibility</span>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+
+    <div class="field">
+
+        <label>Password</label>
+
+        {{ form.password }}
+
+    </div>
+
+
+          <div class="row mt-2">
+            <label class="checkbox">
+              <input type="checkbox"> Remember for 30 days
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn primary mt-3">Log In</button>
+        </form>
+
+        <p class="signup">Don’t have an account? <a href="#">Sign Up</a></p>
+
+      </div>
+    </div>
+
+</div>
+  </section>
+
+    </div>
+</div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+    /*  OJOS */
+const allEyes = document.querySelectorAll(".eyes span");
+const mouths = document.querySelectorAll(".mouth");
+
+const MAX_MOVE = 7;
+let eyesLocked = false;
+
+/* FOLLOW MOUSE */
+document.addEventListener("mousemove", e => {
+  if (eyesLocked) return;
+
+  allEyes.forEach(eye => {
+    const r = eye.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const angle = Math.atan2(dy, dx);
+
+    eye.style.transform = `
+      translate(
+        ${Math.cos(angle) * MAX_MOVE}px,
+        ${Math.sin(angle) * MAX_MOVE}px
+      )
+    `;
+  });
+});
+
+/*  PARPADEO */
+function blinkAll() {
+  if (eyesLocked) return;
+
+  gsap.to(allEyes, {
+    scaleY: 0.15,
+    duration: 0.1,
+    yoyo: true,
+    repeat: 1,
+    ease: "power1.inOut",
+    transformOrigin: "center"
+  });
+}
+
+setInterval(blinkAll, 2600);
+
+/* FORM ELEMENTS */
+const emailInput = document.querySelector('input[type="email"]');
+const passwordInput = document.querySelector('input[type="password"]');
+const toggleBtn = document.querySelector(".password button");
+
+/*  EMAIL → BOCA ABIERTA
+ */
+emailInput.addEventListener("input", () => {
+  gsap.to(mouths, {
+    scaleY: 1.6,
+    scaleX: 1.2,
+    duration: 0.15,
+    transformOrigin: "center"
+  });
+});
+
+/* cerrar boca al salir del email */
+emailInput.addEventListener("blur", () => {
+  gsap.to(mouths, {
+    scaleY: 1,
+    scaleX: 1,
+    duration: 0.2
+  });
+});
+
+/* PASSWORD → CERRAR BOCA */
+passwordInput.addEventListener("focus", () => {
+  gsap.to(mouths, {
+    scaleY: 1,
+    scaleX: 1,
+    duration: 0.2
+  });
+});
+
+/* VER PASSWORD */
+toggleBtn.addEventListener("click", () => {
+  const showing = passwordInput.type === "password";
+  passwordInput.type = showing ? "text" : "password";
+
+  if (showing) {
+    // activar modo "no quiero ver"
+    eyesLocked = true;
+
+    gsap.to(allEyes, {
+      x: -MAX_MOVE * 1.2,
+      y: 0,
+      duration: 0.2
+    });
+  } else {
+    // volver a normal
+    eyesLocked = false;
+
+    gsap.to(allEyes, {
+      x: 0,
+      y: 0,
+      duration: 0.25
+    });
+  }
+});
+
+</script>
+{% endblock %}

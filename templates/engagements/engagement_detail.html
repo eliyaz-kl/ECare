@@ -1,0 +1,833 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="container-fluid">
+
+        <div class="row g-0">
+
+
+            <!-- CONTENT COLUMN -->
+            <div class="col content-area">
+
+                <div class="row h-100 m-0">
+
+                    <!-- HEADER -->
+                    <header
+                        class="col-12 header-bar d-flex align-items-center justify-content-between shadow-sm sticky-top px-3">
+
+                        <div class="d-flex align-items-center gap-4">
+
+                            <div class="position-relative">
+                                <span class="material-symbols-outlined search-icon">search</span>
+
+                                <input type="text" class="form-control search-input" placeholder="Search Tickets..."
+                                    style="width:380px;">
+                            </div>
+
+                        </div>
+
+                    </header>
+
+                    <div class="row h-100 p-3 m-0">
+                        <!-- Ticket Details -->
+                        <div class="col-6">
+
+                            <div class="surface-card rounded-4 overflow-hidden shadow-soft">
+
+                                <!-- CARD HEADER -->
+                                <div class="bg-surface-soft border-bottom px-4 py-3">
+
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                                        <!-- LEFT -->
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <span class="material-symbols-outlined text-primary">
+                                                confirmation_number
+                                            </span>
+
+                                            <div class="ticket-title">
+                                                #{{ engagement.id }}
+                                            </div>
+
+                                        </div>
+
+                                        <!-- RIGHT -->
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="badge rounded-pill px-3 py-2"
+                                                style="background:#d0e1fb;color:#54647a;">
+
+                                                <span class="d-inline-block rounded-circle me-1"
+                                                    style="width:6px;height:6px;background:#2563eb;"></span>
+
+                                                {{ engagement.status }}
+                                            </span>
+
+                                            <button class="btn btn-light border-0">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- CARD BODY -->
+                                <div class="p-4">
+
+                                    <div class="row g-4">
+
+                                        <!-- LEFT COLUMN -->
+                                        <div class="col-md-6">
+
+                                            <div class="mb-4">
+
+                                                <div class="label-caps mb-2">
+                                                    Problem Code / Category
+                                                </div>
+
+                                                <div
+                                                    class="bg-surface-soft border rounded-3 p-3 d-flex align-items-center gap-2">
+
+                                                    <span class="material-symbols-outlined"
+                                                        style="font-size:18px;color:#943700;">
+                                                        payments
+                                                    </span>
+
+                                                    <span>
+                                                        Issue &gt; {{ engagement.category }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row g-3">
+
+                                                <!-- PRIORITY -->
+                                                <div class="col-6">
+
+                                                    <div class="label-caps mb-2">
+                                                        Priority
+                                                    </div>
+
+                                                    <span class="badge text-uppercase px-3 py-2"
+                                                        style="background:var(--danger-bg);color:var(--danger);">
+                                                        {{ engagement.priority }}
+                                                    </span>
+
+                                                </div>
+
+                                                <!-- SLA -->
+                                                <div class="col-6">
+
+                                                    <div class="label-caps mb-2">
+                                                        SLA Remaining
+                                                    </div>
+
+                                                    <div
+                                                        class="d-flex align-items-center gap-1 fw-bold text-danger fs-14">
+
+                                                        <span class="material-symbols-outlined" style="font-size:16px;">
+                                                            schedule
+                                                        </span>
+
+                                                        {{ engagement.sla|date:"H:i" }}
+
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- RIGHT COLUMN -->
+                                        <div class="col-md-6">
+
+                                            <div
+                                                class="bg-surface-soft border rounded-4 p-3 h-100 d-flex flex-column justify-content-center">
+
+                                                <div class="d-flex align-items-center gap-3 mb-3">
+
+                                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkV8uLlkNZZ4l58GvB6vY1yxqfOUpSTTRALPKqQtNt-ie76lFxFVdrVy0bwUHJbx3iRi0YiAHjXkEbwDOtWzYLL_shtGwZLYu0ku2vRRQw2XhD_j0VDzoajwGPFrOS5GmjkoCQuWwVQE_mQ5aJsFtQoU3G3Mt93gm3gmVXb-k6QQhwKdOYzVlNCmFTAUiGCKQaq_9uVn7Xg53SD6la-rMC9ciM0_XpE9XSmTljMQTJKevjPas-6R8UpkO3qS3x9Q-HwLhW_DKvhwA"
+                                                        class="rounded-circle border border-2 border-white shadow-sm"
+                                                        width="52" height="52">
+
+                                                    <div class="flex-grow-1">
+
+                                                        <div
+                                                            class="fw-bold d-flex align-items-center justify-content-between fs-14">
+                                                            <span>{{ engagement.customer.username }}</span>
+
+                                                            <button class="btn" type="button" data-bs-toggle="offcanvas"
+                                                                data-bs-target="#offcanvasExample"
+                                                                aria-controls="offcanvasExample">
+                                                                <i class="fa-solid fa-circle-info text-lg"></i>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="text-muted-custom fs-14">
+                                                            Premium Account
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-2 text-muted-custom fs-12">
+
+                                                    <span class="material-symbols-outlined" style="font-size:14px;">
+                                                        Contact_Mail
+
+                                                    </span>
+
+                                                    @{{ engagement.customer.display_name }}
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- FULL WIDTH DESCRIPTION -->
+                                        <div class="col-12">
+
+                                            <div class="label-caps mb-2">
+                                                Ticket Details
+                                            </div>
+
+                                            <div class="border rounded-4 p-4 bg-white shadow-sm"
+                                                style="min-height:160px;line-height:1.8;">
+
+                                                Customer reports an unexpected charge of $49.99 on their monthly
+                                                statement dated October 14th. They claim to have canceled the
+                                                "Advanced Analytics" add-on three days prior to the billing cycle
+                                                renewal.
+
+                                                <br><br>
+
+                                                Requested immediate refund and clarification on the cancellation
+                                                policy for enterprise-tier subscriptions. Customer mentioned they
+                                                have a confirmation email for the cancellation
+                                                (Reference: CNX-9921).
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- PRIVATE NOTE -->
+                                        <div class="col-12">
+
+                                            <div class="private-note rounded-end-4 p-4">
+
+                                                <div class="d-flex align-items-center gap-2 mb-2"
+                                                    style="color:var(--purple);">
+
+                                                    <span class="material-symbols-outlined" style="font-size:16px;">
+                                                        lock
+                                                    </span>
+
+                                                    <span class="label-caps mb-0" style="color:var(--purple);">
+                                                        Internal Private Note
+                                                    </span>
+
+                                                </div>
+
+                                                <p class="mb-0 fst-italic fs-14">
+
+                                                    Agent Note: I've checked the logs, and the cancellation
+                                                    request was indeed processed on the 11th, but the billing
+                                                    engine had already locked the batch. Refund is technically
+                                                    justified.
+
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div class="bg-surface-soft border-top px-4 py-3">
+
+                                    <div class="d-flex align-items-center gap-4 flex-wrap">
+
+                                        <button
+                                            class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
+
+                                            <span class="material-symbols-outlined" style="font-size:18px;">
+                                                attachment
+                                            </span>
+
+                                            3 Attachments
+
+                                        </button>
+
+                                        <button
+                                            class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
+
+                                            <span class="material-symbols-outlined" style="font-size:18px;">
+                                                history
+                                            </span>
+
+                                            Activity Log
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- LEFT PANEL -->
+                        <div class="col-6 bg-body p-0">
+
+
+                            <div
+                                class="p-3 border-bottom border-outline bg-surface d-flex align-items-center justify-content-between">
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <span class="material-symbols-outlined text-primary-custom" style="font-size:20px;">
+                                        crossword
+                                    </span>
+
+                                    <span class="fw-bold">
+                                        Channel: X
+                                    </span>
+
+                                </div>
+
+                                <div>
+                                    <span class="status-pill"
+                                        style="background:var(--secondary-container);color:var(--on-secondary-container);">
+                                        Public
+                                    </span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="flex-grow-1 overflow-auto custom-scrollbar p-3 d-flex flex-column gap-4">
+
+                                <!-- MESSAGE -->
+                                <div class="d-flex flex-column gap-1" style="max-width:90%;">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <span class="fw-bold">
+                                            Alex Rivera
+                                        </span>
+
+                                        <span class="tiny-text text-muted-custom">
+                                            10:42 AM
+                                        </span>
+
+                                    </div>
+
+                                    <div class="message-bubble-user p-3">
+
+                                        <p class="mb-0">
+                                            I'm having trouble with my recent order #4492. It's been stuck in
+                                            'Processing' for 3
+                                            days now. Can someone check the status? I need this by Friday.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- AGENT -->
+                                <div class="d-flex flex-column gap-1 ms-auto align-items-end" style="max-width:90%;">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <span class="tiny-text text-muted-custom">
+                                            10:45 AM
+                                        </span>
+
+                                        <span class="fw-bold">
+                                            You (Agent)
+                                        </span>
+
+                                    </div>
+
+                                    <div class="message-bubble-agent p-3">
+
+                                        <p class="mb-0">
+                                            Hi Alex, I'm sorry for the delay! Let me look into that order for you right
+                                            away.
+                                            One moment while I pull up the warehouse logs.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- MESSAGE -->
+                                <div class="d-flex flex-column gap-1" style="max-width:90%;">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <span class="fw-bold">
+                                            Alex Rivera
+                                        </span>
+
+                                        <span class="tiny-text text-muted-custom">
+                                            10:46 AM
+                                        </span>
+
+                                    </div>
+
+                                    <div class="message-bubble-user p-3">
+
+                                        <p class="mb-0">
+                                            Thank you. I appreciate the quick response. It's a birthday gift so the
+                                            timing is
+                                            quite critical.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="surface-card">
+
+                                <!-- AI -->
+                                <div class="m-3 p-3 ai-suggestion d-flex flex-column gap-2">
+
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="material-symbols-outlined text-primary-custom">
+                                                auto_awesome
+                                            </span>
+
+                                            <span class="fw-bold text-primary-custom">
+                                                AI Suggested Draft
+                                            </span>
+
+                                        </div>
+
+                                        <span class="status-pill text-uppercase"
+                                            style="background:var(--primary);color:var(--on-primary);letter-spacing:.08em;">
+                                            AI Suggestion
+                                        </span>
+
+
+                                    </div>
+
+                                    <p class="mb-0 fst-italic"
+                                        style="font-size:14px;color:var(--on-primary-fixed-variant);">
+
+                                        "Hi Alex, I've checked order #4492. It appears there was a brief inventory sync
+                                        delay,
+                                        but it's now marked as 'Ready for Dispatch'. I'll upgrade this to Priority
+                                        Shipping for
+                                        you to ensure it arrives by Friday."
+
+                                    </p>
+
+                                </div>
+
+                                <!-- EDITOR -->
+                                <div class="flex-grow-1 d-flex flex-column px-3 pb-3">
+
+                                    <div
+                                        class="editor-toolbar d-flex align-items-center gap-2 py-2 border-bottom border-outline mb-3">
+
+                                        <button>
+                                            <span class="material-symbols-outlined">format_bold</span>
+                                        </button>
+
+                                        <button>
+                                            <span class="material-symbols-outlined">format_italic</span>
+                                        </button>
+
+                                        <button>
+                                            <span class="material-symbols-outlined">format_underlined</span>
+                                        </button>
+
+                                        <div class="vr mx-1"></div>
+
+                                        <button>
+                                            <span class="material-symbols-outlined">sentiment_satisfied</span>
+                                        </button>
+
+                                        <button>
+                                            <span class="material-symbols-outlined">attach_file</span>
+                                        </button>
+
+                                        <button class="ms-auto">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+
+                                    </div>
+
+                                    <textarea class="editor-textarea" placeholder="Type your reply here..."></textarea>
+
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div
+                                    class="p-3 border-top border-outline bg-surface d-flex align-items-center justify-content-between">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <button class="primary-btn d-flex align-items-center gap-2">
+
+                                            <span class="material-symbols-outlined">
+                                                send
+                                            </span>
+
+                                            Approve & Send
+
+                                        </button>
+
+                                        <button class="secondary-btn">
+                                            Edit
+                                        </button>
+
+                                    </div>
+
+                                    <button class="escalate-btn d-flex align-items-center gap-2">
+
+                                        <span class="material-symbols-outlined">
+                                            priority_high
+                                        </span>
+
+                                        Escalate
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+                                aria-labelledby="offcanvasExampleLabel">
+                                <div class="flex-grow-1 overflow-auto custom-scrollbar p-4">
+
+                                    <!-- LIVE EXTRACTION -->
+                                    <section class="mb-4">
+
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <h3 class="section-title mb-0">Live Extraction</h3>
+
+                                            <span class="live-badge">Live</span>
+                                        </div>
+
+                                        <div class="card-custom p-3">
+
+                                            <div class="mb-3">
+                                                <div class="text-label mb-1">Active ID</div>
+                                                <div class="fw-bold" style="color:var(--primary);">
+                                                    Ticket #88492
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3">
+
+                                                <div class="col-6">
+                                                    <div class="text-label mb-1">National ID</div>
+                                                    <div class="fw-medium" style="letter-spacing:.12em;">
+                                                        ****-4567
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <div class="text-label mb-1">CIC</div>
+                                                    <div class="fw-medium">
+                                                        99283-A
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- CRM MATCH -->
+                                    <section class="mb-4">
+
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+
+                                            <h3 class="section-title mb-0">CRM Match</h3>
+
+                                            <div class="d-flex align-items-center gap-1 px-2 py-1 rounded-pill"
+                                                style="background:#dcfce7;color:#166534;font-size:12px;font-weight:500;">
+
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size:14px;font-variation-settings:'FILL' 1;">
+                                                    verified
+                                                </span>
+
+                                                Verified
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="crm-card p-3">
+
+                                            <div class="d-flex align-items-center gap-3 mb-4">
+
+                                                <div class="customer-avatar">
+                                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQZ_dfEgQCtUv1Id9WPcIkzuXYOZOB6S30sWyJkdXBprwgEUzqF1nO9BJs4hfrTyMj3JYwRKuwbZViqF2GffC5AVF4yaWcEvT8KuKrB7xWkSYRknjLRuwFENOhjs_WFOyG3DF9q0k84BkMXK5zQkuX0bk1541-K0zUo9U3kZXG9PW2jcdvu3kA9esfhxw98cR_bJmnIMgxX_mlt39dUf_Gz7Fu06VodiYLnyWxxIK9UeIP5Fece8OqDzUlaEg7099HgHxzGiUXvPk"
+                                                        class="w-100 h-100 object-fit-cover" alt="">
+                                                </div>
+
+                                                <div>
+                                                    <div class="fw-bold">Sarah Mitchell</div>
+                                                    <div class="text-small" style="color:var(--on-surface-variant);">
+                                                        Enterprise Tier Customer
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="mb-4">
+
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <span class="material-symbols-outlined"
+                                                        style="font-size:18px;color:var(--outline);">
+                                                        call
+                                                    </span>
+
+                                                    <span class="text-small">
+                                                        +1 (555) 012-3456
+                                                    </span>
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="material-symbols-outlined"
+                                                        style="font-size:18px;color:var(--outline);">
+                                                        mail
+                                                    </span>
+
+                                                    <span class="text-small">
+                                                        sarah.m@example.com
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                            <div
+                                                class="compare-box p-2 d-flex align-items-center justify-content-between">
+
+                                                <div class="d-flex align-items-center gap-2">
+
+                                                    <span class="material-symbols-outlined"
+                                                        style="font-size:20px;color:var(--primary);">
+                                                        compare_arrows
+                                                    </span>
+
+                                                    <span class="fw-medium text-small" style="color:var(--primary);">
+                                                        CIC Comparison
+                                                    </span>
+
+                                                </div>
+
+                                                <span class="compare-badge">
+                                                    MATCH: 99283-A
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- HISTORICAL -->
+                                    <section class="mb-4">
+
+                                        <h3 class="section-title mb-3">
+                                            Historical Interactions
+                                        </h3>
+
+                                        <!-- ITEM -->
+                                        <div class="timeline-item">
+
+                                            <div class="timeline-line"></div>
+
+                                            <div class="timeline-icon border border-2"
+                                                style="border-color:var(--primary)!important;">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size:12px;color:var(--primary);">
+                                                    alternate_email
+                                                </span>
+                                            </div>
+
+                                            <div class="timeline-card alt">
+
+                                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                                    <span class="text-label">
+                                                        Oct 24, 2023
+                                                    </span>
+
+                                                    <span style="font-size:12px;font-weight:500;color:var(--primary);">
+                                                        #Billing
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-small fw-medium">
+                                                    Inquiry regarding latest invoice
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- ITEM -->
+                                        <div class="timeline-item">
+
+                                            <div class="timeline-line"></div>
+
+                                            <div class="timeline-icon border border-2"
+                                                style="border-color:var(--secondary)!important;">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size:12px;color:var(--secondary);">
+                                                    mail
+                                                </span>
+                                            </div>
+
+                                            <div class="timeline-card">
+
+                                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                                    <span class="text-label">
+                                                        Oct 15, 2023
+                                                    </span>
+
+                                                    <span
+                                                        style="font-size:12px;font-weight:500;color:var(--secondary);">
+                                                        #Technical
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-small fw-medium">
+                                                    API integration timeout errors
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- ITEM -->
+                                        <div class="timeline-item pb-0">
+
+                                            <div class="timeline-icon border border-2"
+                                                style="border-color:var(--outline)!important;">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size:12px;color:var(--outline);">
+                                                    call
+                                                </span>
+                                            </div>
+
+                                            <div class="timeline-card">
+
+                                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                                    <span class="text-label">
+                                                        Sep 28, 2023
+                                                    </span>
+
+                                                    <span style="font-size:12px;font-weight:500;color:var(--outline);">
+                                                        #General
+                                                    </span>
+                                                </div>
+
+                                                <div class="text-small fw-medium">
+                                                    Plan upgrade consultation
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- PRIVATE NOTE -->
+                                    <section class="private-note p-3">
+
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+
+                                            <span class="material-symbols-outlined"
+                                                style="color:var(--tertiary);font-variation-settings:'FILL' 1;">
+                                                lock
+                                            </span>
+
+                                            <h3 class="mb-0"
+                                                style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--tertiary);">
+                                                Private Agent Note
+                                            </h3>
+
+                                        </div>
+
+                                        <p class="mb-0 fst-italic text-small" style="color:var(--on-surface-variant);">
+                                            Customer is highly sensitive to response times. Prioritize clear SLA
+                                            timelines in all
+                                            billing communications.
+                                        </p>
+
+                                    </section>
+
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div class="footer-actions p-4 d-flex gap-2">
+
+                                    <button
+                                        class="btn btn-primary-custom flex-grow-1 d-flex align-items-center justify-content-center gap-1">
+
+                                        <span class="material-symbols-outlined" style="font-size:18px;">
+                                            edit
+                                        </span>
+
+                                        Edit CRM
+
+                                    </button>
+
+                                    <button
+                                        class="btn btn-icon-custom d-flex align-items-center justify-content-center">
+
+                                        <span class="material-symbols-outlined">
+                                            more_horiz
+                                        </span>
+
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+{% endblock %}

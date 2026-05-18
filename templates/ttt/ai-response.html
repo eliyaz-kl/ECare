@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AI Response</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #004ac6;
+            --primary-container: #2563eb;
+
+            --surface: #faf8ff;
+            --surface-low: #f3f3fe;
+            --surface-high: #e7e7f3;
+
+            --outline: #c3c6d7;
+
+            --text: #191b23;
+            --text-muted: #434655;
+            --surface-container: #ededf9;
+            --primary-fixed: #dbe1ff;
+            --inverse-primary: #b4c5ff;
+            --on-primary-container: #eeefff;
+            --on-error: #ffffff;
+            --on-error-container: #93000a;
+            --tertiary-container: #bc4800;
+            --tertiary: #943700;
+            --surface-tint: #0053db;
+            --surface: #faf8ff;
+            --on-primary-fixed: #00174b;
+            --secondary: #505f76;
+            --on-primary: #ffffff;
+            --inverse-surface: #2e3039;
+            --error: #ba1a1a;
+            --on-secondary-fixed-variant: #38485d;
+            --surface-container-high: #e7e7f3;
+            --secondary-fixed: #d3e4fe;
+            --primary-container: #2563eb;
+            --on-surface-variant: #434655;
+            --tertiary-fixed: #ffdbcd;
+            --on-tertiary-fixed-variant: #7d2d00;
+            --surface-container-highest: #e1e2ed;
+            --secondary-container: #d0e1fb;
+            --on-tertiary: #ffffff;
+            --on-tertiary-container: #ffede6;
+            --surface-container-low: #f3f3fe;
+            --secondary-fixed-dim: #b7c8e1;
+            --outline-variant: #c3c6d7;
+            --surface-bright: #faf8ff;
+            --surface-container: #ededf9;
+            --on-secondary-container: #54647a;
+            --on-secondary: #ffffff;
+            --surface-dim: #d9d9e5;
+            --primary: #004ac6;
+            --background: #faf8ff;
+            --tertiary-fixed-dim: #ffb596;
+            --on-primary-fixed-variant: #003ea8;
+            --primary-fixed-dim: #b4c5ff;
+            --surface-container-lowest: #ffffff;
+            --surface-variant: #e1e2ed;
+            --on-surface: #191b23;
+            --on-tertiary-fixed: #360f00;
+            --on-secondary-fixed: #0b1c30;
+            --on-background: #191b23;
+            --error-container: #ffdad6;
+            --inverse-on-surface: #f0f0fb;
+            --outline: #737686;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-size: 20px;
+            vertical-align: middle;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar-column {
+            width: 280px;
+            transition: all .3s ease;
+        }
+
+        .sidebar-column.collapsed {
+            width: 90px;
+        }
+
+        .sidebar {
+            background: var(--surface-low);
+            border-right: 1px solid var(--outline);
+            height: 100vh;
+        }
+
+        .sidebar-link {
+            color: var(--text-muted);
+            border-radius: 12px;
+            transition: .2s;
+            white-space: nowrap;
+        }
+
+        .sidebar-link:hover {
+            background: var(--surface-high);
+            color: var(--text);
+        }
+
+        .sidebar-link.active {
+            background: var(--primary-container);
+            color: #fff;
+        }
+
+        .sidebar-column.collapsed .menu-text,
+        .sidebar-column.collapsed .logo-text,
+        .sidebar-column.collapsed .profile-info {
+            display: none;
+        }
+
+        .sidebar-column.collapsed .sidebar-link {
+            justify-content: center;
+        }
+
+        .sidebar-column.collapsed .profile-wrapper {
+            justify-content: center;
+        }
+
+        .sidebar-column.collapsed .new-ticket-btn span:last-child {
+            display: none;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+        }
+
+        .header-bar {
+            height: 64px;
+            background: var(--surface);
+            border-bottom: 1px solid rgba(0, 0, 0, .03);
+        }
+
+        .profile-status {
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .content-area {
+            background: var(--surface);
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .search-input {
+            background: var(--surface-container);
+            border: none;
+            border-radius: 12px;
+            height: 42px;
+            padding-left: 42px;
+            color: var(--on-surface);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-fixed);
+            background: var(--surface-container);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+            font-size: 20px;
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .conversation-box {
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 20px;
+        }
+
+        .context-sidebar {
+            width: 380px;
+            background: var(--surface-container-low);
+            border-left: 1px solid var(--outline-variant);
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            color: var(--outline);
+            text-transform: uppercase;
+        }
+
+        .live-badge {
+            background: var(--primary);
+            color: var(--on-primary);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .card-custom {
+            background: var(--surface-container-highest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 18px;
+        }
+
+        .crm-card {
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 18px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+        }
+
+        .text-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--on-surface-variant);
+        }
+
+        .text-small {
+            font-size: 14px;
+        }
+
+        .customer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary-fixed);
+        }
+
+        .compare-box {
+            background: var(--surface-container);
+            border: 1px solid rgba(219, 225, 255, .5);
+            border-radius: 12px;
+        }
+
+        .compare-badge {
+            background: var(--primary-fixed);
+            color: var(--on-primary-fixed);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 28px;
+            padding-bottom: 24px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 9px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--outline-variant);
+        }
+
+        .timeline-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--surface-container-lowest);
+            position: absolute;
+            left: 0;
+            top: 4px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-card {
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .timeline-card.alt {
+            background: var(--surface-container-highest);
+        }
+
+        .private-note {
+            background: var(--surface-container);
+            border: 1px solid var(--outline-variant);
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .private-note::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--tertiary-container);
+        }
+
+        .footer-actions {
+            background: var(--surface);
+            border-top: 1px solid var(--outline-variant);
+        }
+
+        .btn-primary-custom {
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            height: 42px;
+        }
+
+        .btn-primary-custom:hover {
+            opacity: .92;
+        }
+
+        .btn-icon-custom {
+            width: 48px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--outline-variant);
+            background: transparent;
+            color: var(--on-surface-variant);
+        }
+
+        .btn-icon-custom:hover {
+            background: var(--secondary-container);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e1e2ed;
+            border-radius: 10px;
+        }
+
+        @media(max-width:991px) {
+            .sidebar-left {
+                width: 64px;
+            }
+
+            .hide-mobile {
+                display: none !important;
+            }
+
+            .context-sidebar {
+                width: 340px;
+            }
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: var(--background);
+            color: var(--on-surface);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            line-height: 1;
+        }
+
+        .app-shell {
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .topbar {
+            height: 64px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
+            box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .04);
+            z-index: 999;
+        }
+
+        .main-layout {
+            margin-left: 256px;
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+            background: var(--background);
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 11px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--outline-variant);
+        }
+
+        .timeline-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--surface-container-high);
+            border: 2px solid #fff;
+            z-index: 2;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .text-muted-custom {
+            color: var(--on-surface-variant) !important;
+        }
+
+        .bg-surface {
+            background: var(--surface) !important;
+        }
+
+        .bg-surface-low {
+            background: var(--surface-container-low) !important;
+        }
+
+        .bg-surface-high {
+            background: var(--surface-container-high) !important;
+        }
+
+        .bg-surface-lowest {
+            background: var(--surface-container-lowest) !important;
+        }
+
+        .border-outline {
+            border-color: var(--outline-variant) !important;
+        }
+
+        .text-primary-custom {
+            color: var(--primary) !important;
+        }
+
+        .rounded-4 {
+            border-radius: 16px !important;
+        }
+
+        .rounded-3 {
+            border-radius: 12px !important;
+        }
+
+        .small-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .tiny-text {
+            font-size: 10px;
+        }
+
+        .status-pill {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        @media(max-width:1400px) {
+            .main-layout {
+                overflow: auto;
+            }
+        }
+
+        .priority-low {
+            color: green;
+            font-size: 12px;
+            background: rgb(184, 255, 184);
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid p-0">
+
+        <div class="row g-0">
+
+            <!-- SIDEBAR COLUMN -->
+            <div class="col-auto sidebar-column" id="sidebarColumn">
+
+                <aside class="sidebar d-flex flex-column p-3 position-relative">
+
+                    <!-- TOGGLE BUTTON -->
+                    <button class="btn btn-light border toggle-btn" id="toggleSidebar">
+
+                        <span class="material-symbols-outlined">
+                            menu
+                        </span>
+
+                    </button>
+
+                    <!-- LOGO -->
+                    <div class="mb-4 pe-5">
+
+                        <h4 class="fw-bold text-primary mb-0 logo-text">
+                            Support Ops Suite
+                        </h4>
+
+                    </div>
+
+
+
+                    <!-- NAVIGATION -->
+                    <nav class="d-flex flex-column gap-1 flex-grow-1">
+
+                        <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\supervisor-dashboard.html"
+                            class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                psychology
+                            </span>
+
+                            <span class="menu-text">
+                                AI Insights
+                            </span>
+
+                        </a>
+
+                        <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                            class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                inbox
+                            </span>
+
+                            <span class="menu-text">
+                                Inbox
+                            </span>
+
+                        </a>
+
+                        <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                            class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                person_search
+                            </span>
+
+                            <span class="menu-text">
+                                Assigned
+                            </span>
+
+                        </a>
+
+                        <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                            class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                check_circle
+                            </span>
+
+                            <span class="menu-text">
+                                Resolved
+                            </span>
+
+                        </a>
+
+                        <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\ai-response.html"
+                            class="sidebar-link active text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                Quickreply
+                            </span>
+
+                            <span class="menu-text">
+                                AI Response
+                            </span>
+
+                        </a>
+
+                    </nav>
+
+
+                    <!-- FOOTER -->
+                    <div class="pt-3">
+
+                        <!-- BUTTON -->
+                        <button
+                            class="btn text-white d-flex align-items-center justify-content-center gap-2 mb-3 new-ticket-btn w-100"
+                            style="background:var(--primary-container); border-radius:12px;">
+
+                            <span class="material-symbols-outlined">
+                                add
+                            </span>
+
+                            <span class="menu-text">
+                                New Ticket
+                            </span>
+
+                        </button>
+
+                        <!-- PROFILE -->
+                        <div class="d-flex align-items-center gap-3 mb-3 profile-wrapper border-top pt-3">
+
+                            <div class="position-relative">
+
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBva-WRa83ZBWiJffePZ3dGy2bRysK6QB7fcN5_XoBQR6O9YFBOMmtzXdD_xZfVA_ndlGtDMUDxMaa7YTfGBX9FSRZ_WpH35nszP5tMxfg5I23gAW5XC_AfNGSEiB72U9KkujjDVn7G5O9ucrDoGg02dfk3XYENc3EWViVz3DN-_TSkqB77pknHeT67OKnSSVVTaIw3sOmjn7uMhPAwYNB2d7dPk9VlTTZNFu-MQouEPxUZdBRyC2SuwdWKwgkqmRZ3bSvsIn2Xgak"
+                                    class="rounded-circle object-fit-cover" width="42" height="42">
+
+                                <span class="profile-status"></span>
+
+                            </div>
+
+                            <div class="profile-info overflow-hidden">
+
+                                <div class="fw-bold text-truncate" style="font-size:14px;">
+                                    Marcus Chen
+                                </div>
+
+                                <div class="text-uppercase text-truncate"
+                                    style="font-size:10px; letter-spacing:.08em; color:var(--text-muted);">
+
+                                    Contact Center Alpha
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- HELP -->
+                        <a href="#" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                help
+                            </span>
+
+                            <span class="menu-text">
+                                Help
+                            </span>
+
+                        </a>
+
+                        <!-- SETTINGS -->
+                        <a href="#" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+
+                            <span class="menu-text">
+                                Settings
+                            </span>
+
+                        </a>
+
+                        <!-- LOGOUT -->
+                        <a href="#" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                            <span class="material-symbols-outlined">
+                                logout
+                            </span>
+
+                            <span class="menu-text">
+                                Logout
+                            </span>
+
+                        </a>
+
+
+
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+            <!-- CONTENT COLUMN -->
+            <div class="col content-area">
+
+                <div class="h-100 m-0">
+
+                    <!-- HEADER -->
+                    <header
+                        class="col-12 header-bar d-flex align-items-center justify-content-between shadow-sm sticky-top px-3">
+
+                        <div class="d-flex align-items-center gap-4">
+
+                            <div class="position-relative">
+                                <span class="material-symbols-outlined search-icon">search</span>
+
+                                <input type="text" class="form-control search-input" placeholder="Search Tickets..."
+                                    style="width:380px;">
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <button class="btn p-2 bg-secondary-subtle rounded-circle position-relative">
+                                <span class="material-symbols-outlined" style="color:var(--on-surface-variant);">
+                                    notifications
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                        <span class="visually-hidden">Notifications</span>
+                                    </span>
+                                </span>
+
+                            </button>
+                        </div>
+
+                    </header>
+
+                    <div class="p-3">
+
+                        <!-- KPI SECTION -->
+                        <div class="row mb-4">
+
+                            <!-- KPI 1 -->
+                            <div class="col-12 col-md-6 col-lg-3">
+
+                                <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                                    <!-- TOP -->
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                        <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                            SLA Compliance
+
+                                        </span>
+
+                                        <span class="material-symbols-outlined rounded-3 p-1" style="
+                        color:#16a34a;
+                        background:#f0fdf4;
+                        font-size:20px;
+                      ">
+
+                                            verified
+
+                                        </span>
+
+                                    </div>
+
+                                    <!-- VALUE -->
+                                    <div class="d-flex align-items-end gap-2">
+
+                                        <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                            94.2%
+
+                                        </span>
+
+                                        <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#16a34a;
+                        padding-bottom:4px;
+                      ">
+
+                                            <span class="material-symbols-outlined me-1" style="font-size:14px;">
+
+                                                trending_up
+
+                                            </span>
+
+                                            0.8%
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- KPI 2 -->
+                            <div class="col-12 col-md-6 col-lg-3">
+
+                                <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                        <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                            Total Tickets Responded
+
+                                        </span>
+
+                                        <span class="material-symbols-outlined rounded-3 p-1" style="
+                        color:#ba1a1a;
+                        background:#ffdad6;
+                        font-size:20px;
+                      ">
+
+                                            warning
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex align-items-end gap-2">
+
+                                        <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                            90
+
+                                        </span>
+
+                                        <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#2dba1a;
+                        padding-bottom:4px;
+                      ">
+
+                                            <span class="material-symbols-outlined me-1" style="font-size:14px;">
+
+                                                trending_up
+
+                                            </span>
+
+                                            4
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- KPI 3 -->
+                            <div class="col-12 col-md-6 col-lg-3">
+
+                                <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                        <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                            AI Responses Used
+
+                                        </span>
+
+                                        <span class="material-symbols-outlined rounded-3 p-1" style="
+                        color:#004ac6;
+                        background:#dbe1ff;
+                        font-size:20px;
+                      ">
+
+                                            group
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex align-items-end gap-2 mb-3">
+
+                                        <span class="fw-bold" style="
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                            <span class="fs-3">50/</span><span class="fs-6">150</span>
+
+                                        </span>
+
+                                    </div>
+
+                                    <!-- PROGRESS -->
+                                    <div class="progress" style="
+                    height:4px;
+                    background:#e7e7f3;
+                 ">
+
+                                        <div class="progress-bar" role="progressbar" style="
+                        width:24%;
+                        background:#004ac6;
+                     ">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- KPI 4 -->
+                            <div class="col-12 col-md-6 col-lg-3">
+
+                                <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                        <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                            Time Saved
+
+                                        </span>
+
+                                        <span class="material-symbols-outlined rounded-3 p-1" style="
+                        color:#943700;
+                        background:#ffdbcd;
+                        font-size:20px;
+                      ">
+
+                                            schedule
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex align-items-end gap-2">
+
+                                        <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                            74h 24m
+
+                                        </span>
+
+                                        <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#16a34a;
+                        padding-bottom:4px;
+                      ">
+
+                                            <span class="material-symbols-outlined me-1" style="font-size:14px;">
+
+                                                trending_up
+
+                                            </span>
+
+                                            12h
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Your Data Grid container -->
+                                <div id="myGrid" style="height: 500px"></div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Includes all JS & CSS for the JavaScript Data Grid -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+    <script>
+
+        // Row Data Interface
+
+        // Grid API: Access to Grid API methods
+        let gridApi;
+
+        const theme = agGrid.themeQuartz;
+
+        // Cell class rules for status column
+        const priorityCellClassRules = {
+            "priority-low": (params) => params.value === "Low",
+            "priority-medium": (params) => params.value === "Medium",
+            "priority-high": (params) => params.value === "High",
+            "priority-critical": (params) => params.value === "Critical",
+        };
+
+        // Grid Options: Contains all of the grid configurations
+        const gridOptions = {
+            // Data to be displayed
+            rowData: [
+                {
+                    'Ticket ID': "#TKT-8842",
+                    'Accuracy Percentage': "52%",
+                    Priority: "Low",
+                    Source: "Twitter",
+                    'AI Response Used': "False"
+                },
+                {
+                    'Ticket ID': "#TKT-8884",
+                    'Accuracy Percentage': "88%",
+                    Priority: "High",
+                    Source: "Facebook",
+                    'AI Response Used': "True"
+                },
+
+
+            ],
+            // Columns to be displayed (Should match rowData properties)
+            columnDefs: [
+                { field: "Ticket ID" },
+                { field: "Accuracy Percentage" },
+                { field: "Priority" },
+                { field: "Source" },
+                { field: "AI Response Used" },
+            ],
+
+            autoSizeStrategy: {
+                type: 'fitGridWidth',
+                defaultMinWidth: 100,
+            },
+            // Configurations applied to all columns
+            defaultColDef: {
+                filter: true,
+                editable: true,
+            },
+            // Grid Options & Callbacks
+            pagination: true,
+        };
+        // Create Grid: Create new grid within the #myGrid div, using the Grid Options object
+        gridApi = agGrid.createGrid(document.querySelector("#myGrid"), gridOptions);
+
+
+        const sidebar = document.getElementById('sidebarColumn');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+
+    </script>
+
+</body>
+
+</html>

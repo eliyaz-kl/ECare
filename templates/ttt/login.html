@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    * {
+  box-sizing: border-box;
+  font-family: "DM Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #bff6ff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app { width: 100%; padding: 24px; }
+
+.card {
+  max-width: 1100px;
+  margin: auto;
+  background: #fff;
+  display: flex;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0,0,0,.15);
+}
+
+/* LEFT */
+.illustration {
+  width: 50%;
+  background: #f0f0f0;
+  position: relative;
+  overflow: visible;
+}
+
+.shapes {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.shape {
+  position: absolute;
+  bottom: 0;
+  transition: transform .3s;
+}
+
+.shape:hover { transform: scale(1.05); }
+
+/* SHAPES */
+.purple {
+  left: 28%;
+  width: 130px;
+  height: 280px;
+  background: #7c3aed;
+  z-index: 2;
+}
+
+.dark {
+  left: 52%;
+  width: 110px;
+  height: 180px;
+  background: #111;
+  z-index: 3;
+}
+
+.yellow {
+  left: 60%;
+  width: 130px;
+  height: 130px;
+  background: #facc15;
+  border-radius: 60px 60px 0 0;
+  z-index: 4;
+}
+
+/* OJOS AMARILLO */
+.yellow .eye {
+  position: absolute;
+  top: 40px;
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.yellow .eye.left { left: 32px; }
+.yellow .eye.right { left: 72px; }
+
+.yellow .smile {
+  position: absolute;
+  top: 60px;
+  left: 30px;
+  width: 40px;
+  height: 6px;
+  background: #000;
+  border-radius: 20px;
+}
+
+.orange {
+  left: 18%;
+  width: 260px;
+  height: 120px;
+  background: #f97316;
+  border-radius: 100px 100px 0 0;
+  z-index: 5;
+}
+
+/* EYES */
+.eyes {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.eyes span {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  position: relative;
+  transition: transform .1s linear;
+}
+
+.eyes span::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+}
+
+.no-pupil span::after { display: none; }
+
+.dark-eyes span {
+  width: 14px;
+  height: 14px;
+}
+
+.dark-eyes span::after {
+  width: 5px;
+  height: 5px;
+  top: 4.5px;
+  left: 4.5px;
+}
+
+.orange-eyes span {
+  background: #000;
+}
+
+.orange-eyes span::after { display: none; }
+
+/* MOUTHS */
+.mouth {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  width: 20px;
+  height: 6px;
+  background: rgba(0,0,0,.3);
+  border-radius: 0 0 20px 20px;
+  transform: translateX(-50%);
+}
+
+.mouth.big {
+  width: 40px;
+  height: 10px;
+  background: rgba(0,0,0,.6);
+}
+
+/* FORM */
+.form-container { width: 50%; padding: 60px; }
+
+.form-box { max-width: 360px; margin: auto; }
+
+.header { text-align: center; }
+
+.logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+}
+
+.field { margin-top: 24px; }
+
+.field input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+}
+
+.password { position: relative; }
+
+.password button {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.row {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.primary { background: #000; color: #fff; }
+
+.signup {
+  text-align: center;
+  margin-top: 24px;
+}
+
+/* RESPONSIVE (SOLO MEDIA QUERIES) */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .illustration,
+  .form-container {
+    width: 100%;
+  }
+
+  .illustration {
+    height: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 32px 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<main class="app">
+  <section class="card">
+
+    <!-- LEFT -->
+    <div class="illustration">
+      <div class="shapes">
+
+        <div class="shape purple happy">
+          <div class="eyes no-pupil">
+            <span></span><span></span>
+          </div>
+          <div class="mouth"></div>
+        </div>
+
+        <div class="shape dark">
+          <div class="eyes dark-eyes">
+            <span></span><span></span>
+          </div>
+        </div>
+
+        <!-- AMARILLO CON 2 OJOS -->
+        <div class="shape yellow">
+            <div class="eyes orange-eyes"><span></span><span></span></div>
+          <span class="mouth big"></span>
+        </div>
+
+        <div class="shape orange">
+          <div class="eyes orange-eyes">
+            <span></span><span></span>
+          </div>
+          <div class="mouth big"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-container">
+      <div class="form-box">
+
+        <div class="header">
+          <!-- SVG QUITADO → IMAGEN -->
+
+          <h1>Welcome</h1>
+          <p>Please enter your details</p>
+        </div>
+
+        <form>
+          <div class="field">
+            <label>Email</label>
+            <input id="email" type="email" placeholder="Enter your email" required>
+          </div>
+
+          <div class="field">
+            <label>Password</label>
+            <div class="password">
+              <input id="password" type="password" placeholder="••••••••" required>
+              <button type="button">
+                <span class="material-icons-outlined">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="checkbox">
+              <input type="checkbox"> Remember for 30 days
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button class="btn primary">Log In</button>
+        </form>
+
+        <p class="signup">Don’t have an account? <a href="#">Sign Up</a></p>
+
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+    /*  OJOS */
+const allEyes = document.querySelectorAll(".eyes span");
+const mouths = document.querySelectorAll(".mouth");
+
+const MAX_MOVE = 7;
+let eyesLocked = false;
+
+/* FOLLOW MOUSE */
+document.addEventListener("mousemove", e => {
+  if (eyesLocked) return;
+
+  allEyes.forEach(eye => {
+    const r = eye.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const angle = Math.atan2(dy, dx);
+
+    eye.style.transform = `
+      translate(
+        ${Math.cos(angle) * MAX_MOVE}px,
+        ${Math.sin(angle) * MAX_MOVE}px
+      )
+    `;
+  });
+});
+
+/*  PARPADEO */
+function blinkAll() {
+  if (eyesLocked) return;
+
+  gsap.to(allEyes, {
+    scaleY: 0.15,
+    duration: 0.1,
+    yoyo: true,
+    repeat: 1,
+    ease: "power1.inOut",
+    transformOrigin: "center"
+  });
+}
+
+setInterval(blinkAll, 2600);
+
+/* FORM ELEMENTS */
+const emailInput = document.querySelector('input[type="email"]');
+const passwordInput = document.querySelector('input[type="password"]');
+const toggleBtn = document.querySelector(".password button");
+
+/*  EMAIL → BOCA ABIERTA
+ */
+emailInput.addEventListener("input", () => {
+  gsap.to(mouths, {
+    scaleY: 1.6,
+    scaleX: 1.2,
+    duration: 0.15,
+    transformOrigin: "center"
+  });
+});
+
+/* cerrar boca al salir del email */
+emailInput.addEventListener("blur", () => {
+  gsap.to(mouths, {
+    scaleY: 1,
+    scaleX: 1,
+    duration: 0.2
+  });
+});
+
+/* PASSWORD → CERRAR BOCA */
+passwordInput.addEventListener("focus", () => {
+  gsap.to(mouths, {
+    scaleY: 1,
+    scaleX: 1,
+    duration: 0.2
+  });
+});
+
+/* VER PASSWORD */
+toggleBtn.addEventListener("click", () => {
+  const showing = passwordInput.type === "password";
+  passwordInput.type = showing ? "text" : "password";
+
+  if (showing) {
+    // activar modo "no quiero ver"
+    eyesLocked = true;
+
+    gsap.to(allEyes, {
+      x: -MAX_MOVE * 1.2,
+      y: 0,
+      duration: 0.2
+    });
+  } else {
+    // volver a normal
+    eyesLocked = false;
+
+    gsap.to(allEyes, {
+      x: 0,
+      y: 0,
+      duration: 0.25
+    });
+  }
+});
+
+</script>
+</body>
+</html>

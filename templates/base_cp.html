@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Ecare Platform</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar" id="sidebarColumn">
+
+        <h2>Ecare</h2>
+
+        <nav>
+
+            <a href="/">Dashboard</a>
+
+            <a href="/inbox/">Inbox</a>
+
+            <a href="/inbox/?type=DM">
+                DMs
+            </a>
+
+            <a href="/inbox/?type=MENTION">
+                Mentions
+            </a>
+
+            <a href="/inbox/?type=POST_REPLY">
+                Replies
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                Welcome {{ user.username }}
+            </div>
+
+            <form
+                method="post"
+                action="/accounts/logout/"
+            >
+
+                {% csrf_token %}
+
+                <button type="submit">
+                    Logout
+                </button>
+
+            </form>
+
+        </header>
+
+        <section class="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

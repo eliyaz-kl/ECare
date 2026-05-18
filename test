@@ -1,0 +1,3 @@
+python manage.py startapp engagements apps/engagements
+python manage.py startapp customers apps/customers
+s

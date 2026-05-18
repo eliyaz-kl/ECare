@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Inbox</h1>
+<p>
+
+    <a href="/inbox/">
+        All
+    </a>
+
+    |
+
+    <a href="/inbox/?type=DM">
+        DMs
+    </a>
+
+    |
+
+    <a href="/inbox/?type=MENTION">
+        Mentions
+    </a>
+
+    |
+
+    <a href="/inbox/?type=POST_REPLY">
+        Replies
+    </a>
+
+</p>
+
+{% for engagement in engagements %}
+
+<div class="engagement-item">
+
+    <h3>
+
+        <a href="/engagement/{{ engagement.id }}/">
+
+            {{ engagement.customer.username }}
+
+        </a>
+
+    </h3>
+
+    <p>
+        {{ engagement.content|truncatechars:120 }}
+    </p>
+
+    <span class="badge">
+        {{ engagement.engagement_type }}
+    </span>
+
+    <span class="badge">
+        {{ engagement.status }}
+    </span>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

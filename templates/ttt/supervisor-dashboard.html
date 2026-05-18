@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AI Insights</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #004ac6;
+            --primary-container: #2563eb;
+
+            --surface: #faf8ff;
+            --surface-low: #f3f3fe;
+            --surface-high: #e7e7f3;
+
+            --outline: #c3c6d7;
+
+            --text: #191b23;
+            --text-muted: #434655;
+            --surface-container: #ededf9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-size: 20px;
+            vertical-align: middle;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar-column {
+            width: 280px;
+            transition: all .3s ease;
+        }
+
+        .sidebar-column.collapsed {
+            width: 90px;
+        }
+
+        .sidebar {
+            background: var(--surface-low);
+            border-right: 1px solid var(--outline);
+            height: 100vh;
+        }
+
+        .sidebar-link {
+            color: var(--text-muted);
+            border-radius: 12px;
+            transition: .2s;
+            white-space: nowrap;
+        }
+
+        .sidebar-link:hover {
+            background: var(--surface-high);
+            color: var(--text);
+        }
+
+        .sidebar-link.active {
+            background: var(--primary-container);
+            color: #fff;
+        }
+
+        .sidebar-column.collapsed .menu-text,
+        .sidebar-column.collapsed .logo-text,
+        .sidebar-column.collapsed .profile-info {
+            display: none;
+        }
+
+        .sidebar-column.collapsed .sidebar-link {
+            justify-content: center;
+        }
+
+        .sidebar-column.collapsed .profile-wrapper {
+            justify-content: center;
+        }
+
+        .sidebar-column.collapsed .new-ticket-btn span:last-child {
+            display: none;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+        }
+
+        .profile-status {
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .content-area {
+            background: var(--surface);
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .search-input {
+            background: var(--surface-container);
+            border: none;
+            border-radius: 12px;
+            height: 42px;
+            padding-left: 42px;
+            color: var(--on-surface);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-fixed);
+            background: var(--surface-container);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid p-0">
+
+    <div class="row g-0">
+
+        <!-- SIDEBAR COLUMN -->
+        <div class="col-auto sidebar-column" id="sidebarColumn">
+
+            <aside class="sidebar d-flex flex-column p-3 position-relative">
+
+                <!-- TOGGLE BUTTON -->
+                <button class="btn btn-light border toggle-btn" id="toggleSidebar">
+
+                                                <span class="material-symbols-outlined">
+                                                        menu
+                                                </span>
+
+                </button>
+
+                <!-- LOGO -->
+                <div class="mb-4 pe-5">
+
+                    <h4 class="fw-bold text-primary mb-0 logo-text">
+                        Support Ops Suite
+                    </h4>
+
+                </div>
+
+
+                <!-- NAVIGATION -->
+                <nav class="d-flex flex-column gap-1 flex-grow-1">
+
+                    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\supervisor-dashboard.html"
+                       class="sidebar-link active text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                psychology
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                AI Insights
+                                                        </span>
+
+                    </a>
+
+                    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                inbox
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Inbox
+                                                        </span>
+
+                    </a>
+
+                    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                person_search
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Assigned
+                                                        </span>
+
+                    </a>
+
+                    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                check_circle
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Resolved
+                                                        </span>
+
+                    </a>
+
+                    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\ai-response.html"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                Quickreply
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                AI Response
+                                                        </span>
+
+                    </a>
+
+                </nav>
+
+                <!-- FOOTER -->
+                <div class="">
+
+                    <!-- BUTTON -->
+                    <button class="btn text-white d-flex align-items-center justify-content-center gap-2 mb-4 new-ticket-btn w-100"
+                            style="background:var(--primary-container); border-radius:12px;">
+
+                                                        <span class="material-symbols-outlined">
+                                                                add
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                New Ticket
+                                                        </span>
+
+                    </button>
+
+                    <!-- PROFILE -->
+                    <div
+                            class="d-flex align-items-center gap-3 mb-3 profile-wrapper border-top pt-3">
+
+                        <div class="position-relative">
+
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBva-WRa83ZBWiJffePZ3dGy2bRysK6QB7fcN5_XoBQR6O9YFBOMmtzXdD_xZfVA_ndlGtDMUDxMaa7YTfGBX9FSRZ_WpH35nszP5tMxfg5I23gAW5XC_AfNGSEiB72U9KkujjDVn7G5O9ucrDoGg02dfk3XYENc3EWViVz3DN-_TSkqB77pknHeT67OKnSSVVTaIw3sOmjn7uMhPAwYNB2d7dPk9VlTTZNFu-MQouEPxUZdBRyC2SuwdWKwgkqmRZ3bSvsIn2Xgak"
+                                 class="rounded-circle object-fit-cover"
+                                 width="42" height="42">
+
+                            <span class="profile-status"></span>
+
+                        </div>
+
+                        <div class="profile-info overflow-hidden">
+
+                            <div class="fw-bold text-truncate"
+                                 style="font-size:14px;">
+                                Marcus Chen
+                            </div>
+
+                            <div class="text-uppercase text-truncate"
+                                 style="font-size:10px; letter-spacing:.08em; color:var(--text-muted);">
+
+                                Contact Center Alpha
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- HELP -->
+                    <a href="#"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                help
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Help
+                                                        </span>
+
+                    </a>
+
+                    <!-- SETTINGS -->
+                    <a href="#"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                settings
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Settings
+                                                        </span>
+
+                    </a>
+
+                    <!-- LOGOUT -->
+                    <a href="#"
+                       class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+
+                                                        <span class="material-symbols-outlined">
+                                                                logout
+                                                        </span>
+
+                        <span class="menu-text">
+                                                                Logout
+                                                        </span>
+
+                    </a>
+
+
+                </div>
+
+            </aside>
+
+        </div>
+
+        <!-- CONTENT COLUMN -->
+        <div class="col content-area">
+
+            <!-- TOP HEADER -->
+            <header class="bg-white border-bottom px-4"
+                    style="height:64px; border-color:#c3c6d7 !important;">
+
+                <div class="d-flex justify-content-between align-items-center h-100">
+
+                    <!-- LEFT SECTION -->
+                    <div class="d-flex align-items-center gap-3">
+
+                        <!-- TITLE -->
+                        <h1 class="mb-0 fw-bold" style="
+                    font-size:24px;
+                    line-height:32px;
+                    color:#004ac6;
+                    letter-spacing:-0.01em;
+                ">
+
+                            Global Command Center
+
+                        </h1>
+
+                        <!-- LIVE STATUS -->
+                        <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-pill"
+                             style="
+                    background:#ededf9;
+                    color:#505f76;
+                 ">
+
+                                                                <span class="rounded-circle bg-success"
+                                                                      style="width:8px; height:8px;"></span>
+
+                            <span class="text-uppercase fw-semibold" style="
+                        font-size:11px;
+                        letter-spacing:.05em;
+                      ">
+
+                                                                        Live • Updates in 5s
+
+                                                                </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT SECTION -->
+                    <div class="d-flex align-items-center gap-4">
+
+                        <!-- NAVIGATION -->
+                        <div class="d-none d-lg-flex align-items-center gap-4">
+                            <div class="position-relative">
+                                                                        <span
+                                                                                class="material-symbols-outlined search-icon">search</span>
+
+                                <input type="text"
+                                       class="form-control search-input"
+                                       placeholder="Search Tickets..."
+                                       style="width:380px;">
+                            </div>
+
+                            <a href="#" class="text-decoration-none fw-medium pb-1"
+                               style="
+                        font-size:14px;
+                        color:#004ac6;
+                        border-bottom:2px solid #004ac6;
+                   ">
+
+                                Dashboard
+
+                            </a>
+
+                            <a href="#" class="text-decoration-none" style="
+                        font-size:14px;
+                        color:#505f76;
+                   ">
+
+                                Tickets
+
+                            </a>
+
+                            <a href="#" class="text-decoration-none" style="
+                        font-size:14px;
+                        color:#505f76;
+                   ">
+
+                                Analytics
+
+                            </a>
+
+                            <a href="#" class="text-decoration-none" style="
+                        font-size:14px;
+                        color:#505f76;
+                   ">
+
+                                Team
+
+                            </a>
+
+                        </div>
+
+                        <!-- ACTIONS -->
+                        <div class="d-flex align-items-center gap-3 border-start ps-4"
+                             style="border-color:#c3c6d7 !important;">
+
+                            <!-- NOTIFICATION -->
+                            <button
+                                    class="btn p-0 border-0 bg-transparent text-secondary">
+
+                                                                        <span class="material-symbols-outlined">
+                                                                                notifications
+                                                                        </span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- KPI SECTION -->
+            <div class="row g-4 mb-4 p-4">
+
+                <!-- KPI 1 -->
+                <div class="col-12 col-md-6 col-lg-3">
+
+                    <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                        <!-- TOP -->
+                        <div
+                                class="d-flex justify-content-between align-items-start mb-2">
+
+                                                                <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                                                        SLA Compliance
+
+                                                                </span>
+
+                            <span class="material-symbols-outlined rounded-3 p-1"
+                                  style="
+                        color:#16a34a;
+                        background:#f0fdf4;
+                        font-size:20px;
+                      ">
+
+                                                                        verified
+
+                                                                </span>
+
+                        </div>
+
+                        <!-- VALUE -->
+                        <div class="d-flex align-items-end gap-2">
+
+                                                                <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                                                        94.2%
+
+                                                                </span>
+
+                            <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#16a34a;
+                        padding-bottom:4px;
+                      ">
+
+                                                                        <span class="material-symbols-outlined me-1"
+                                                                              style="font-size:14px;">
+
+                                                                                trending_up
+
+                                                                        </span>
+
+                                                                        0.8%
+
+                                                                </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="col-12 col-md-6 col-lg-3">
+
+                    <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                        <div
+                                class="d-flex justify-content-between align-items-start mb-2">
+
+                                                                <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                                                        Active Escalations
+
+                                                                </span>
+
+                            <span class="material-symbols-outlined rounded-3 p-1"
+                                  style="
+                        color:#ba1a1a;
+                        background:#ffdad6;
+                        font-size:20px;
+                      ">
+
+                                                                        warning
+
+                                                                </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-end gap-2">
+
+                                                                <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                                                        18
+
+                                                                </span>
+
+                            <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#ba1a1a;
+                        padding-bottom:4px;
+                      ">
+
+                                                                        <span class="material-symbols-outlined me-1"
+                                                                              style="font-size:14px;">
+
+                                                                                trending_up
+
+                                                                        </span>
+
+                                                                        4
+
+                                                                </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="col-12 col-md-6 col-lg-3">
+
+                    <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                        <div
+                                class="d-flex justify-content-between align-items-start mb-2">
+
+                                                                <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                                                        Online Agents
+
+                                                                </span>
+
+                            <span class="material-symbols-outlined rounded-3 p-1"
+                                  style="
+                        color:#004ac6;
+                        background:#dbe1ff;
+                        font-size:20px;
+                      ">
+
+                                                                        group
+
+                                                                </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-end gap-2 mb-3">
+
+                                                                <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                                                        142/150
+
+                                                                </span>
+
+                        </div>
+
+                        <!-- PROGRESS -->
+                        <div class="progress" style="
+                    height:4px;
+                    background:#e7e7f3;
+                 ">
+
+                            <div class="progress-bar" role="progressbar" style="
+                        width:94%;
+                        background:#004ac6;
+                     ">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="col-12 col-md-6 col-lg-3">
+
+                    <div class="bg-white border rounded-4 p-4 h-100" style="
+                border-color:#c3c6d7 !important;
+                box-shadow:0 4px 12px rgba(0,0,0,0.05);
+             ">
+
+                        <div
+                                class="d-flex justify-content-between align-items-start mb-2">
+
+                                                                <span class="text-uppercase fw-semibold" style="
+                        font-size:12px;
+                        letter-spacing:.08em;
+                        color:#505f76;
+                      ">
+
+                                                                        Avg Response Time
+
+                                                                </span>
+
+                            <span class="material-symbols-outlined rounded-3 p-1"
+                                  style="
+                        color:#943700;
+                        background:#ffdbcd;
+                        font-size:20px;
+                      ">
+
+                                                                        schedule
+
+                                                                </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-end gap-2">
+
+                                                                <span class="fw-bold" style="
+                        font-size:30px;
+                        line-height:38px;
+                        color:#191b23;
+                      ">
+
+                                                                        1m 24s
+
+                                                                </span>
+
+                            <span class="d-flex align-items-center fw-bold" style="
+                        font-size:12px;
+                        color:#16a34a;
+                        padding-bottom:4px;
+                      ">
+
+                                                                        <span class="material-symbols-outlined me-1"
+                                                                              style="font-size:14px;">
+
+                                                                                trending_down
+
+                                                                        </span>
+
+                                                                        12s
+
+                                                                </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="row g-4 p-4">
+
+                <!-- Left Section -->
+                <div class="col-12 col-xl-7">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h2 class="fw-semibold mb-0"
+                            style="font-size:24px; color:#191b23;">
+                            Active Escalations
+                        </h2>
+
+                        <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center gap-1"
+                                style="color:#004ac6; font-size:12px; font-weight:600; letter-spacing:.05em;">
+                            View All
+                            <span class="material-symbols-outlined"
+                                  style="font-size:16px;">arrow_forward</span>
+                        </button>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+
+                        <!-- Card 1 -->
+                        <div class="card border-0 rounded-4 shadow-sm"
+                             style="background:#fff; border:1px solid #c3c6d7 !important;">
+
+                            <div class="card-body p-3">
+
+                                <div
+                                        class="d-flex justify-content-between align-items-start mb-3">
+
+                                    <div
+                                            class="d-flex align-items-center gap-3">
+
+                                                                                        <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded text-uppercase"
+                                                                                              style="background:#bc4800; color:#fff; font-size:12px; font-weight:500;">
+                                                                                                <span class="material-symbols-outlined"
+                                                                                                      style="font-size:12px; font-variation-settings:'FILL' 1;">star</span>
+                                                                                                VIP
+                                                                                        </span>
+
+                                        <div>
+                                            <div class="fw-bold"
+                                                 style="font-size:14px; color:#191b23;">
+                                                <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\open-task.html"
+                                                   style="text-decoration: none; color: #000;">Payment
+                                                    Processing
+                                                    Loop
+                                                    #829
+                                                </a>
+                                            </div>
+
+                                            <div
+                                                    style="font-size:14px; color:#434655;">
+                                                Customer: Global
+                                                Logistics Inc.
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="text-end">
+
+                                        <div class="fw-bold d-flex align-items-center justify-content-end gap-1"
+                                             style="font-size:16px; color:#ba1a1a;">
+                                                                                                <span class="material-symbols-outlined"
+                                                                                                      style="font-size:18px;">timer</span>
+                                            04:12
+                                        </div>
+
+                                        <div class="text-uppercase"
+                                             style="font-size:10px; color:#434655; letter-spacing:.05em;">
+                                            Time Remaining
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="border-top pt-3"
+                                     style="border-color:#c3c6d7 !important;">
+
+                                    <div
+                                            class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                                        <div
+                                                class="d-flex align-items-center gap-2">
+
+                                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCpgB1HXXxs5My1fC38PgJj69luQdOiHNqqChehrZ_jSyv4V_kuxHGbLE1cZxBtGwLufTAOziNKdZyd3DQ_GSy13QoYyLECEKdb9VViuygjtua3YdQDBKWL8CBkBDdCh3x-OZUBqHcjSAzOjxroDYbY41b8iYrz5ftTXOAy7iiR_x0RzTjgX8PhEEoyN5NbCwbua2eNn4Bhu-6y52NZM29v51zOGF0Q9P1JZsgwtySAUCdIbKp9jLYGIvifsXH7hulmYkT73k4w8M"
+                                                 class="rounded-circle object-fit-cover"
+                                                 width="24"
+                                                 height="24">
+
+                                            <span
+                                                    style="font-size:14px; color:#434655;">
+                                                                                                        Assigned:
+                                                                                                        <span class="fw-bold"
+                                                                                                              style="color:#191b23;">
+                                                                                                                Sarah
+                                                                                                                Jenkins
+                                                                                                        </span>
+                                                                                                </span>
+
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+
+                                            <button class="btn btn-sm rounded-3 px-3"
+                                                    style="background:#ededf9; border:1px solid #c3c6d7; color:#505f76;">
+                                                Monitor
+                                            </button>
+
+                                            <button class="btn btn-sm rounded-3 px-3"
+                                                    style="background:#004ac6; color:#fff;">
+                                                Intervene
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="card border-0 rounded-4 shadow-sm"
+                             style="background:#fff; border:1px solid #c3c6d7 !important;">
+
+                            <div class="card-body p-3">
+
+                                <div
+                                        class="d-flex justify-content-between align-items-start mb-3">
+
+                                    <div
+                                            class="d-flex align-items-center gap-3">
+
+                                                                                        <span class="px-2 py-1 rounded text-uppercase"
+                                                                                              style="background:#d0e1fb; color:#54647a; font-size:12px; font-weight:500;">
+                                                                                                Medium
+                                                                                        </span>
+
+                                        <div>
+                                            <div class="fw-bold"
+                                                 style="font-size:14px; color:#191b23;">
+                                                <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\open-task.html"
+                                                   style="text-decoration: none; color: #000;">
+                                                    Unable
+                                                    to sync
+                                                    CRM with
+                                                    Dashboard
+                                                </a>
+
+                                            </div>
+
+                                            <div
+                                                    style="font-size:14px; color:#434655;">
+                                                Customer:
+                                                TechStart
+                                                Solutions
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="text-end">
+
+                                        <div class="fw-bold d-flex align-items-center justify-content-end gap-1"
+                                             style="font-size:16px; color:#943700;">
+                                                                                                <span class="material-symbols-outlined"
+                                                                                                      style="font-size:18px;">timer</span>
+                                            12:45
+                                        </div>
+
+                                        <div class="text-uppercase"
+                                             style="font-size:10px; color:#434655; letter-spacing:.05em;">
+                                            Time Remaining
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="border-top pt-3"
+                                     style="border-color:#c3c6d7 !important;">
+
+                                    <div
+                                            class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                                        <div
+                                                class="d-flex align-items-center gap-2">
+
+                                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr67tXirj_YgsJ4Yj7fQD_mzbg6AYb972B5tnwbRP4RvV9ao6sbOXXC7waNkgmR4KrAetYjk-KRrUbBZbvia_rlsne8kF2Jl9pmYis8tDqqr5jqNe6xoEfK3RZ4LHi4MPbWicXckfL_5JsG6yV2CPbnHP_3-T89f4LYKs7sE6OvmPMcc3NMt5-G7IgdDtQIvMg7GOpgtHKznlXAuaCS2lYNv_XIK9D1A5-fBeVZjyo7KxOsMYfpxKvWVFExsd0JzRJ2jhFeNFCOgg"
+                                                 class="rounded-circle object-fit-cover"
+                                                 width="24"
+                                                 height="24">
+
+                                            <span
+                                                    style="font-size:14px; color:#434655;">
+                                                                                                        Assigned:
+                                                                                                        <span class="fw-bold"
+                                                                                                              style="color:#191b23;">
+                                                                                                                David
+                                                                                                                Miller
+                                                                                                        </span>
+                                                                                                </span>
+
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+
+                                            <button class="btn btn-sm rounded-3 px-3"
+                                                    style="background:#ededf9; border:1px solid #c3c6d7; color:#505f76;">
+                                                Monitor
+                                            </button>
+
+                                            <button class="btn btn-sm rounded-3 px-3"
+                                                    style="background:#004ac6; color:#fff;">
+                                                Intervene
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Private Note -->
+                        <div class="rounded-4 border d-flex align-items-start gap-3 p-3"
+                             style="background:#f3f3fe; border-left:4px solid #8B5CF6 !important; border-color:#c3c6d7 !important;">
+
+                                                                <span class="material-symbols-outlined"
+                                                                      style="color:#8B5CF6; font-variation-settings:'FILL' 1;">
+                                                                        lock
+                                                                </span>
+
+                            <div class="flex-grow-1">
+
+                                <div
+                                        class="d-flex justify-content-between mb-1">
+
+                                                                                <span class="fw-bold"
+                                                                                      style="font-size:14px; color:#8B5CF6;">
+                                                                                        Supervisor Note
+                                                                                </span>
+
+                                    <span class="text-uppercase"
+                                          style="font-size:10px; color:#434655;">
+                                                                                        2 mins ago
+                                                                                </span>
+
+                                </div>
+
+                                <p class="mb-0 fst-italic"
+                                   style="font-size:14px; color:#434655;">
+                                    "Monitoring the Logistics Inc case.
+                                    Sarah is handling well but might need
+                                    technical escalation if the API doesn't
+                                    respond by 04:00."
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Right Section -->
+                <div class="col-12 col-xl-5">
+
+                    <div class="d-flex flex-column gap-4">
+
+                        <!-- AI Sentiment -->
+                        <div class="card border-0 rounded-4 shadow-sm"
+                             style="background:#fff; border:1px solid #c3c6d7 !important;">
+
+                            <div class="card-body p-4">
+
+                                <div
+                                        class="d-flex align-items-center gap-2 mb-4">
+                                                                                <span class="material-symbols-outlined"
+                                                                                      style="color:#004ac6;">psychology</span>
+
+                                    <h3 class="fw-bold mb-0"
+                                        style="font-size:20px; color:#191b23;">
+                                        AI Sentiment Alerts
+                                    </h3>
+                                </div>
+
+                                <div class="d-flex flex-column gap-3">
+
+                                    <!-- Alert 1 -->
+                                    <div class="d-flex gap-3 p-2 rounded-3"
+                                         style="transition:.2s;">
+
+                                        <div class="rounded-circle mt-2"
+                                             style="width:8px; height:8px; background:#ba1a1a;">
+                                        </div>
+
+                                        <div class="flex-grow-1">
+
+                                            <div
+                                                    class="d-flex justify-content-between mb-1">
+
+                                                                                                        <span class="fw-bold"
+                                                                                                              style="font-size:14px; color:#191b23;">
+                                                                                                                High
+                                                                                                                Dissatisfaction
+                                                                                                        </span>
+
+                                                <span
+                                                        style="font-size:11px; color:#434655;">
+                                                                                                                Just Now
+                                                                                                        </span>
+
+                                            </div>
+
+                                            <p class="mb-0"
+                                               style="font-size:14px; color:#434655;">
+                                                "Customer
+                                                repeatedly
+                                                mentioning
+                                                'unacceptable
+                                                wait times' and
+                                                'lost revenue'.
+                                                Signal detected:
+                                                High Churn
+                                                Risk."
+                                            </p>
+
+                                        </div>
+
+                                        <span class="material-symbols-outlined"
+                                              style="color:#ba1a1a;">
+                                                                                                sentiment_very_dissatisfied
+                                                                                        </span>
+
+                                    </div>
+
+                                    <!-- Alert 2 -->
+                                    <div class="d-flex gap-3 p-2 rounded-3">
+
+                                        <div class="rounded-circle mt-2"
+                                             style="width:8px; height:8px; background:#943700;">
+                                        </div>
+
+                                        <div class="flex-grow-1">
+
+                                            <div
+                                                    class="d-flex justify-content-between mb-1">
+
+                                                                                                        <span class="fw-bold"
+                                                                                                              style="font-size:14px; color:#191b23;">
+                                                                                                                Rising
+                                                                                                                Frustration
+                                                                                                        </span>
+
+                                                <span
+                                                        style="font-size:11px; color:#434655;">
+                                                                                                                5m ago
+                                                                                                        </span>
+
+                                            </div>
+
+                                            <p class="mb-0"
+                                               style="font-size:14px; color:#434655;">
+                                                "Language
+                                                analysis shows
+                                                increasing use
+                                                of negative
+                                                emotive words
+                                                regarding
+                                                'Subscription
+                                                Billing' flow."
+                                            </p>
+
+                                        </div>
+
+                                        <span class="material-symbols-outlined"
+                                              style="color:#943700;">
+                                                                                                sentiment_dissatisfied
+                                                                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- AI Topic Radar -->
+                        <div class="card border-0 rounded-4 shadow-sm"
+                             style="background:#fff; border:1px solid #c3c6d7 !important;">
+
+                            <div class="card-body p-4">
+
+                                <h3 class="fw-bold d-flex align-items-center gap-2 mb-4"
+                                    style="font-size:20px; color:#191b23;">
+
+                                                                                <span class="material-symbols-outlined"
+                                                                                      style="color:#004ac6;">
+                                                                                        radar
+                                                                                </span>
+
+                                    AI Topic Radar
+
+                                </h3>
+
+                                <div class="mb-4">
+
+                                    <p class="text-uppercase d-flex align-items-center gap-1 mb-3"
+                                       style="font-size:10px; color:#ba1a1a; letter-spacing:.1em;">
+
+                                                                                        <span class="rounded-circle"
+                                                                                              style="width:6px; height:6px; background:#ba1a1a;"></span>
+
+                                        Trending Issues
+
+                                    </p>
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                                                                        <span class="badge rounded-pill px-3 py-2"
+                                                                                              style="background:#ffdad6; color:#93000a;">
+                                                                                                Login Failure (+140%)
+                                                                                        </span>
+
+                                        <span class="badge rounded-pill px-3 py-2"
+                                              style="background:#ffdad6; color:#93000a;">
+                                                                                                Payment Loop (+85%)
+                                                                                        </span>
+
+                                        <span class="badge rounded-pill px-3 py-2"
+                                              style="background:#ffdad6; color:#93000a;">
+                                                                                                API 404 Error
+                                                                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <p class="text-uppercase mb-3"
+                                       style="font-size:10px; color:#434655; letter-spacing:.1em;">
+                                        Stable Topics
+                                    </p>
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                                                                        <span class="badge rounded-pill px-3 py-2"
+                                                                                              style="background:#e7e7f3; color:#434655;">
+                                                                                                Password Reset
+                                                                                        </span>
+
+                                        <span class="badge rounded-pill px-3 py-2"
+                                              style="background:#e7e7f3; color:#434655;">
+                                                                                                Shipping Status
+                                                                                        </span>
+
+                                        <span class="badge rounded-pill px-3 py-2"
+                                              style="background:#e7e7f3; color:#434655;">
+                                                                                                Feature Request
+                                                                                        </span>
+
+                                        <span class="badge rounded-pill px-3 py-2"
+                                              style="background:#e7e7f3; color:#434655;">
+                                                                                                Refunds
+                                                                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="pt-4 border-top"
+                                     style="border-color:#c3c6d7 !important;">
+
+                                    <p class="mb-3"
+                                       style="font-size:14px; color:#434655;">
+                                        System Health Analysis:
+                                    </p>
+
+                                    <div
+                                            class="d-flex align-items-center gap-3">
+
+                                        <div class="progress flex-grow-1"
+                                             style="height:8px; background:#e7e7f3;">
+
+                                            <div class="progress-bar"
+                                                 style="width:88%; background:#22c55e;">
+                                            </div>
+
+                                        </div>
+
+                                        <span class="fw-semibold"
+                                              style="font-size:12px; color:#16a34a;">
+                                                                                                88% Healthy
+                                                                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    const sidebar = document.getElementById('sidebarColumn');
+    const toggleBtn = document.getElementById('toggleSidebar');
+
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+</script>
+
+</body>
+
+</html>

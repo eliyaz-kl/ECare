@@ -1,0 +1,65 @@
+<aside class="sidebar sidebar-column col-xl-2 d-flex flex-column p-3 position-relative" id="sidebarColumn">
+  <!-- TOGGLE BUTTON -->
+  <button class="btn btn-light border toggle-btn w-auto border-0 p-0 bg-transparent" id="toggleSidebar">
+    <span class="material-symbols-outlined"> left_panel_close </span>
+  </button>
+  <!-- LOGO -->
+  <div class="mb-4 pe-5">
+    <h4 class="fw-bold text-primary mb-0 logo-text"> Support Ops Suite </h4>
+  </div>
+  <!-- NAVIGATION -->
+  <nav class="d-flex flex-column gap-1 flex-grow-1">
+    <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> psychology </span>
+      <span class="menu-text"> Insights </span>
+    </a>
+    <a href="{% url 'inbox' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inbox' or request.resolver_match.url_name == 'engagement_detail' %}active{% endif %} text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> inbox </span>
+      <span class="menu-text"> Inbox </span>
+    </a>
+    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html" style="cursor: not-allowed" class=" sidebar-link text-secondary-subtle text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> person_search </span>
+      <span class="menu-text"> Assigned </span>
+    </a>
+    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html" style="cursor: not-allowed" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> check_circle </span>
+      <span class="menu-text"> Resolved </span>
+    </a>
+    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\ai-response.html" style="cursor: not-allowed" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> Quickreply </span>
+      <span class="menu-text"> AI Response </span>
+    </a>
+  </nav>
+  <!-- FOOTER -->
+  <div class="">
+    <!-- PROFILE -->
+    <div class="d-flex align-items-center gap-3 mb-3 profile-wrapper border-top pt-3">
+      <div class="position-relative">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBva-WRa83ZBWiJffePZ3dGy2bRysK6QB7fcN5_XoBQR6O9YFBOMmtzXdD_xZfVA_ndlGtDMUDxMaa7YTfGBX9FSRZ_WpH35nszP5tMxfg5I23gAW5XC_AfNGSEiB72U9KkujjDVn7G5O9ucrDoGg02dfk3XYENc3EWViVz3DN-_TSkqB77pknHeT67OKnSSVVTaIw3sOmjn7uMhPAwYNB2d7dPk9VlTTZNFu-MQouEPxUZdBRyC2SuwdWKwgkqmRZ3bSvsIn2Xgak" class="rounded-circle object-fit-cover" width="42" height="42">
+        <span class="profile-status"></span>
+      </div>
+      <div class="profile-info overflow-hidden">
+        <div class="fw-bold text-truncate" style="font-size:14px;">
+          {{ user.username }}
+        </div>
+        <div class="text-uppercase text-truncate" style="font-size:10px; letter-spacing:.08em; color:var(--text-muted);"> Contact Center Alpha </div>
+      </div>
+    </div>
+    <!-- HELP -->
+    <a href="#" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> help </span>
+      <span class="menu-text"> Help </span>
+    </a>
+    <!-- SETTINGS -->
+    <a href="#" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+      <span class="material-symbols-outlined"> settings </span>
+      <span class="menu-text"> Settings </span>
+    </a>
+    <!-- LOGOUT -->
+    <form method="post" action="/accounts/logout/"> {% csrf_token %} <button class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2 border-0 bg-transparent" type="submit">
+        <span class="material-symbols-outlined"> logout </span>
+        <span class="menu-text"> Logout </span>
+      </button>
+    </form>
+  </div>
+</aside>

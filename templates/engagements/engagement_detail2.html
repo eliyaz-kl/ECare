@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+    {{ engagement.customer.username }}
+</h1>
+
+<div class="card">
+
+    <h3>Customer Message</h3>
+
+    <p>
+        {{ engagement.content }}
+    </p>
+
+</div>
+
+<div class="card">
+
+    <h3>AI Suggested Reply</h3>
+
+    <p>
+        {{ engagement.ai_response|default:"No AI suggestion yet" }}
+    </p>
+
+</div>
+
+<div class="card">
+
+    <h3>Agent Reply</h3>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <textarea
+                name="final_response"
+                rows="8"
+                style="width:100%;"
+        >{{ engagement.final_response }}</textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Save Reply
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
