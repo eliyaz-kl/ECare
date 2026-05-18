@@ -96,5 +96,23 @@ class Engagement(models.Model):
         auto_now=True
     )
 
+    request_number = models.CharField(
+        max_length=20,
+        unique=True,
+        null=True,
+        blank=True,
+        editable=False
+    )
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new and not self.request_number:
+            self.request_number = f'REQ{self.pk:04d}'
+            super().save(update_fields=['request_number'])
+
+
     def __str__(self):
         return f"{self.customer.username} - {self.engagement_type}"

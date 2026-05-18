@@ -4,6 +4,7 @@ from django.db import models
 class Customer(models.Model):
     PLATFORM_CHOICES = [
         ('X', 'X Platform'),
+        ('FB', 'Facebook'),
     ]
 
     platform = models.CharField(max_length=50, choices=PLATFORM_CHOICES, default='X')

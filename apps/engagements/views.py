@@ -36,6 +36,7 @@ def _serialize_engagements_for_grid(engagements):
     for engagement in engagements:
         customer = engagement.customer
         rows.append({
+            'request_number': f'#{engagement.request_number}',
             'ticket_id': f'#{engagement.id}',
             'customer_name': customer.display_name or customer.username,
             'subject': engagement.content,
