@@ -115,23 +115,10 @@ def dashboard(request):
         )
 
 
-def inbox(request):
-
-    if not request.user.is_authenticated:
-        return render(
-            request,
-            'engagements/inbox.html',
-            {
-                'engagements': []
-            }
-        )
+def _render_engagement_grid(request, engagements, page_title, list_url_name):
 
     engagement_type = request.GET.get('type')
     search_query = request.GET.get('q', '').strip()
-    engagements = Engagement.objects.select_related(
-        'customer',
-        'assigned_agent'
-    )
 
     if engagement_type:
         engagements = engagements.filter(
@@ -178,12 +165,77 @@ def inbox(request):
             'current_type': engagement_type,
             'current_query': search_query,
             'per_page': per_page,
+            'page_title': page_title,
+            'list_url_name': list_url_name,
             'page_query_prefix': f'{page_query_prefix}&' if page_query_prefix else '',
             'current_type_label': engagement_type_labels.get(
                 engagement_type,
                 'All'
             ),
         }
+    )
+
+
+def inbox(request):
+
+    if not request.user.is_authenticated:
+        return render(
+            request,
+            'engagements/inbox.html',
+            {
+                'engagements': []
+            }
+        )
+
+    engagements = Engagement.objects.select_related(
+        'customer',
+        'assigned_agent'
+    )
+
+    return _render_engagement_grid(
+        request,
+        engagements,
+        'Active Request',
+        'inbox'
+    )
+
+
+@login_required
+def assigned(request):
+    engagements = Engagement.objects.select_related(
+        'customer',
+        'assigned_agent'
+    ).filter(
+        assigned_agent=request.user
+    )
+
+    return _render_engagement_grid(
+        request,
+        engagements,
+        'Assigned Request',
+        'assigned'
+    )
+
+
+@login_required
+def resolved(request):
+    engagements = Engagement.objects.select_related(
+        'customer',
+        'assigned_agent'
+    ).filter(
+        status='CLOSED'
+    )
+
+    if not request.user.is_staff and not request.user.is_superuser:
+        engagements = engagements.filter(
+            assigned_agent=request.user
+        )
+
+    return _render_engagement_grid(
+        request,
+        engagements,
+        'Resolved Request',
+        'resolved'
     )
 
 

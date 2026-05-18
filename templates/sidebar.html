@@ -17,18 +17,15 @@
       <span class="material-symbols-outlined"> inbox </span>
       <span class="menu-text"> All Requests </span>
     </a>
-    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html" style="cursor: not-allowed" class=" sidebar-link text-secondary-subtle text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+    <a href="{% url 'assigned' %}" class="sidebar-link {% if request.resolver_match.url_name == 'assigned' %}active{% endif %} text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
       <span class="material-symbols-outlined"> person_search </span>
       <span class="menu-text"> Assigned </span>
     </a>
-    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\all-tasks.html" style="cursor: not-allowed" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
+    <a href="{% url 'resolved' %}" class="sidebar-link {% if request.resolver_match.url_name == 'resolved' %}active{% endif %} text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
       <span class="material-symbols-outlined"> check_circle </span>
       <span class="menu-text"> Resolved </span>
     </a>
-    <a href="C:\Users\Wahed\OneDrive\Desktop\xplatform - Ecare\ai-response.html" style="cursor: not-allowed" class="sidebar-link text-decoration-none d-flex align-items-center gap-3 px-3 py-2">
-      <span class="material-symbols-outlined"> Quickreply </span>
-      <span class="menu-text"> AI Response </span>
-    </a>
+    
   </nav>
   <!-- FOOTER -->
   <div class="">
