@@ -45,6 +45,7 @@ def _serialize_engagements_for_grid(engagements):
             'source_type': 'Private' if engagement.engagement_type == 'DM' else 'Public',
             'request_type': engagement.get_engagement_type_display(),
             'creation_time': engagement.created_at.strftime('%Y-%m-%d %H:%M'),
+            'status': engagement.status,
             'last_update': engagement.updated_at.strftime('%Y-%m-%d %H:%M'),
             'sla_remaining': _format_sla_remaining(engagement),
             'detail_url': reverse('engagement_detail', args=[engagement.id]),
@@ -189,8 +190,9 @@ def inbox(request):
 
     engagements = Engagement.objects.select_related(
         'customer',
-        'assigned_agent'
-    )
+        'assigned_agent',
+    ).exclude(status='CLOSED')
+
 
     return _render_engagement_grid(
         request,
@@ -206,7 +208,8 @@ def assigned(request):
         'customer',
         'assigned_agent'
     ).filter(
-        assigned_agent=request.user
+        assigned_agent=request.user,
+        status='ASSIGNED'
     )
 
     return _render_engagement_grid(

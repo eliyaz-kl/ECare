@@ -25,6 +25,17 @@ class Engagement(models.Model):
         ('CLOSED', 'Closed'),
     ]
 
+    CATEGORY_CHOICES = [
+        ('General', 'General'),
+        ('Overcharge', 'Overcharge'),
+        ('Billing', 'Billing'),
+        ('Refund', 'Refund'),
+        ('Technical Issue', 'Technical Issue'),
+        ('Account Support', 'Account Support'),
+        ('Complaint', 'Complaint'),
+        ('General Inquiry', 'General Inquiry'),
+    ]
+
     customer = models.ForeignKey(
         Customer,
         on_delete=models.CASCADE,
@@ -59,10 +70,12 @@ class Engagement(models.Model):
         default='Medium'
     )
 
-    category = models.TextField(
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
         null=True,
         blank=True,
-        default = 'Overcharge'
+        default='General'
     )
     sla = models.DateTimeField(
         null=True,
