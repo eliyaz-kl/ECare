@@ -44,17 +44,20 @@
                   <div class="col-md-6">
                     <div class="mb-4">
                       <div class="label-caps mb-2"> Problem Code / Category </div>
-                      <div class="bg-surface-soft border rounded-3 p-3 d-flex align-items-center gap-2">
-                        <span class="material-symbols-outlined" style="font-size:18px;color:#943700;"> payments </span>
-                        <span> Issue &gt; {{ engagement.category }}
-                        </span>
+                      <div class="ticket-category-showcase">
+                        <span class="material-symbols-outlined"> category </span>
+                        <div>
+                          <div class="ticket-field-helper">Issue category</div>
+                          <div class="ticket-category-value">{{ engagement.get_category_display }}</div>
+                        </div>
                       </div>
                     </div>
                     <div class="row g-3">
                       <!-- PRIORITY -->
                       <div class="col-6">
                         <div class="label-caps mb-2"> Priority </div>
-                        <span class="badge text-uppercase px-3 py-2" style="background:var(--danger-bg);color:var(--danger);">
+                        <span class="ticket-priority-showcase ticket-priority-{{ engagement.priority|lower }}">
+                          <span class="ticket-priority-dot"></span>
                           {{ engagement.priority }}
                         </span>
                       </div>
@@ -74,8 +77,15 @@
                       <div class="d-flex align-items-center gap-3 mb-3">
                         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkV8uLlkNZZ4l58GvB6vY1yxqfOUpSTTRALPKqQtNt-ie76lFxFVdrVy0bwUHJbx3iRi0YiAHjXkEbwDOtWzYLL_shtGwZLYu0ku2vRRQw2XhD_j0VDzoajwGPFrOS5GmjkoCQuWwVQE_mQ5aJsFtQoU3G3Mt93gm3gmVXb-k6QQhwKdOYzVlNCmFTAUiGCKQaq_9uVn7Xg53SD6la-rMC9ciM0_XpE9XSmTljMQTJKevjPas-6R8UpkO3qS3x9Q-HwLhW_DKvhwA" class="rounded-circle border border-2 border-white shadow-sm" width="52" height="52">
                         <div class="flex-grow-1">
-                          <div class="fw-bold d-flex align-items-center justify-content-between fs-14">
-                            <span>{{ engagement.customer.username }}</span>
+                          <div class="d-flex align-items-start justify-content-between gap-2">
+                            <div>
+                              <div class="ticket-customer-display-name">
+                                {{ engagement.customer.display_name|default:engagement.customer.username }}
+                              </div>
+                              <div class="ticket-customer-username">
+                                @{{ engagement.customer.username }}
+                              </div>
+                            </div>
                             <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                               <i class="fa-solid fa-circle-info text-lg"></i>
                             </button>
@@ -84,7 +94,7 @@
                         </div>
                       </div>
                       <div class="d-flex align-items-center gap-2 text-muted-custom fs-12">
-                        <span class="material-symbols-outlined" style="font-size:14px;"> Contact_Mail </span> @{{ engagement.customer.display_name }}
+                        <span class="material-symbols-outlined" style="font-size:14px;"> Contact_Mail </span> {{ engagement.customer.get_platform_display }}
                       </div>
                     </div>
                   </div>
@@ -123,7 +133,7 @@
             <div class="p-3 border-bottom border-outline bg-surface d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center gap-2">
                 <span class="material-symbols-outlined text-primary-custom" style="font-size:20px;"> crossword </span>
-                <span class="fw-bold"> Channel: X </span>
+                <span class="fw-bold"> Channel: {{ engagement.customer.platform  }} </span>
               </div>
               <div>
                 <span class="status-pill" style="background:var(--secondary-container);color:var(--on-secondary-container);"> Public </span>
