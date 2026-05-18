@@ -60,7 +60,8 @@ def dashboard(request):
     total_engagements = Engagement.objects.count()
 
     pending_engagements = Engagement.objects.filter(
-        status='NEW'
+        status='NEW',
+
     ).count()
 
     if not request.user.is_authenticated:
@@ -83,7 +84,9 @@ def dashboard(request):
             engagement_type=engagement_type
         )
 
-    engagements = engagements.order_by(
+    engagements = engagements.filter(
+        engagement_type='DM'
+    ).order_by(
         '-created_at'
     )
     paginator = Paginator(engagements, 5)
