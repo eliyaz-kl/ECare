@@ -1,0 +1,522 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-0">
+    <div class="d-flex">
+        <!-- Sidebar Spacer (Representing the 260px margin) -->
+        <div class="sidebar-spacer d-none d-lg-block"></div>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1 pt-5 min-vh-100">
+            <div class="px-4 pb-5">
+
+                <!-- Header Section -->
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="mb-4">
+                        <nav aria-label="breadcrumb" class="mb-1">
+                            <ol class="breadcrumb mb-0" style="font-size: 12px; font-weight: 600;">
+                                <li class="breadcrumb-item text-secondary">User Management</li>
+                                <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Users List
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="h3 fw-bold mb-1">Onboarded Users</h1>
+                        <p class="text-muted small">Configure identity and access of system user.</p>
+                    </div>
+
+                    <a href="{% url 'create-user' %}"
+                       class="btn text-white d-flex align-items-center justify-content-center gap-2 mb-3 new-ticket-btn"
+                       style="background:var(--primary-container); border-radius:12px;">
+                            <span class="material-symbols-outlined">
+                                person_add
+                            </span>
+                            <span class="menu-text">
+                                Add User
+                            </span>
+                    </a>
+                </div>
+
+
+                <!-- Bento Layout Container -->
+
+                <!-- Skeleton Loader -->
+                <div id="skeleton-loader" class="row">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 8px;">
+                            <div class="card-body p-4">
+                                <div class="skeleton-header mb-4">
+                                    <div class="skeleton skeleton-title"></div>
+                                </div>
+                                <div class="skeleton skeleton-table-header mb-3"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row mb-2"></div>
+                                <div class="skeleton skeleton-table-row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="content" style="display: none;">
+                    <div class="col-12">
+                        <!-- Your Data Grid container -->
+                        <div id="myGrid" style="height: 700px"></div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</div>
+
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View User Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="viewUserContent">
+                <!-- User details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="editFirstName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="editLastName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editUsername" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Group</label>
+                            <select class="form-select" id="editGroup">
+                                <option value="">Select Group...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">New Password (leave blank to keep current)</label>
+                            <input type="password" class="form-control" id="editPassword">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveUserBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Includes all JS & CSS for the JavaScript Data Grid -->
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+<style>
+    /* Skeleton Loader Styles */
+    .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.s ease-in-out infinite;
+        border-radius: 4px;
+    }
+
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    .skeleton-title {
+        height: 24px;
+        width: 200px;
+        margin-bottom: 8px;
+    }
+
+    .skeleton-table-header {
+        height: 40px;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .skeleton-table-row {
+        height: 50px;
+        width: 100%;
+        border-radius: 4px;
+    }
+
+    .skeleton-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+</style>
+
+<script>
+
+    // Row Data Interface
+
+    // Grid API: Access to Grid API methods
+    let gridApi;
+
+    const theme = agGrid.themeQuartz;
+
+    // Action buttons cell renderer
+    const actionsCellRenderer = (params) => {
+        const userId = params.data.id;
+        return `
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-info text-white" onclick="viewUser(${userId})" title="View">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span>
+                </button>
+                <button class="btn btn-sm btn-primary" onclick="editUser(${userId})" title="Edit">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="deleteUser(${userId})" title="Delete">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                </button>
+            </div>
+        `;
+    };
+
+    // Channels cell renderer with icons
+    const channelsCellRenderer = (params) => {
+        const channels = params.value;
+        if (!channels || channels === 'No Channels') {
+            return '<span class="text-muted">No Channels</span>';
+        }
+
+        const channelArray = channels.split(',');
+        const iconMap = {
+            'twitter': '/static/images/icon-x-twitter.png',
+            'facebook': '/static/images/icon-facebook.png',
+            'line': '/static/images/icon-line-chat.png',
+            'linkedin': '/static/images/icon-linkedin.png'
+        };
+
+        let iconsHtml = '<div class="d-flex gap-1">';
+        channelArray.forEach(channel => {
+            const trimmedChannel = channel.trim();
+            if (iconMap[trimmedChannel]) {
+                iconsHtml += `<img src="${iconMap[trimmedChannel]}" alt="${trimmedChannel}" style="width: 20px; height: 20px;" title="${trimmedChannel}">`;
+            }
+        });
+        iconsHtml += '</div>';
+
+        return iconsHtml;
+    };
+
+    // Grid Options: Contains all of the grid configurations
+    const gridOptions = {
+        // Data will be loaded from API
+        rowData: [],
+        // Columns to be displayed (Should match rowData properties)
+        columnDefs: [
+            { field: "Full Name" },
+            { field: "User Name" },
+            { field: "Email" },
+            { field: "Status" },
+            { field: "Group" },
+            {
+                field: "Channels",
+                cellRenderer: channelsCellRenderer,
+                sortable: false,
+                width: 150
+            },
+            { field: "Joined Date" },
+            { field: "Last Active" },
+            {
+                field: "Actions",
+                cellRenderer: actionsCellRenderer,
+                sortable: false,
+                filter: false,
+                width: 150
+            },
+        ],
+
+        autoSizeStrategy: {
+            type: 'fitGridWidth',
+            defaultMinWidth: 100,
+        },
+        // Configurations applied to all columns
+        defaultColDef: {
+            filter: true,
+            editable: false,
+        },
+        // Grid Options & Callbacks
+        pagination: true,
+    };
+    // Create Grid: Create new grid within the #myGrid div, using the Grid Options object
+    gridApi = agGrid.createGrid(document.querySelector("#myGrid"), gridOptions);
+
+    // Fetch users data from API
+    const startTime = Date.now();
+    const minLoadingTime = 800; // Minimum time to show skeleton loader (in ms)
+
+    fetch('/app/admin/api/users/')
+        .then(response => response.json())
+        .then(data => {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+
+            setTimeout(() => {
+                gridApi.setGridOption('rowData', data);
+                // Hide skeleton loader and show content
+                document.getElementById('skeleton-loader').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            }, remainingTime);
+        })
+        .catch(error => {
+            console.error('Error loading users:', error);
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+
+            setTimeout(() => {
+                // Hide skeleton loader even on error
+                document.getElementById('skeleton-loader').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            }, remainingTime);
+        });
+
+    function setBaseTheme(id) {
+        gridApi.setGridOption("theme", themes[id]);
+    }
+
+    // View User Function
+    function viewUser(userId) {
+        fetch(`/app/admin/api/users/${userId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const content = `
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <strong>First Name:</strong>
+                            <p>${data.first_name || 'N/A'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Last Name:</strong>
+                            <p>${data.last_name || 'N/A'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Username:</strong>
+                            <p>${data.username}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Email:</strong>
+                            <p>${data.email}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong>
+                            <p>${data.is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Group:</strong>
+                            <p><span class="badge bg-info">${data.groups || 'No Group'}</span></p>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Date Joined:</strong>
+                            <p>${new Date(data.date_joined).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('viewUserContent').innerHTML = content;
+                const viewModal = new bootstrap.Modal(document.getElementById('viewUserModal'));
+                viewModal.show();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Failed to load user details.', 'error');
+            });
+    }
+
+    // Edit User Function
+    function editUser(userId) {
+        // Load groups first
+        fetch('/app/admin/api/groups/')
+            .then(response => response.json())
+            .then(groups => {
+                const groupSelect = document.getElementById('editGroup');
+                groupSelect.innerHTML = '<option value="">Select Group...</option>';
+                groups.forEach(group => {
+                    groupSelect.innerHTML += `<option value="${group.name}">${group.name}</option>`;
+                });
+
+                // Then load user data
+                return fetch(`/app/admin/api/users/${userId}/`);
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('editUserId').value = data.id;
+                document.getElementById('editFirstName').value = data.first_name || '';
+                document.getElementById('editLastName').value = data.last_name || '';
+                document.getElementById('editUsername').value = data.username;
+                document.getElementById('editEmail').value = data.email;
+                document.getElementById('editPassword').value = '';
+
+                // Set the selected group
+                const userGroups = data.groups || '';
+                const firstGroup = userGroups.split(',')[0].trim();
+                document.getElementById('editGroup').value = firstGroup;
+
+                const editModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                editModal.show();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Failed to load user details.', 'error');
+            });
+    }
+
+    // Save User Changes
+    document.getElementById('saveUserBtn').addEventListener('click', function() {
+        const userId = document.getElementById('editUserId').value;
+        const userData = {
+            first_name: document.getElementById('editFirstName').value,
+            last_name: document.getElementById('editLastName').value,
+            username: document.getElementById('editUsername').value,
+            email: document.getElementById('editEmail').value,
+            group: document.getElementById('editGroup').value,
+            password: document.getElementById('editPassword').value
+        };
+
+        fetch(`/app/admin/api/users/${userId}/edit/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('Success!', data.message, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+                // Reload grid data
+                fetch('/app/admin/api/users/')
+                    .then(response => response.json())
+                    .then(data => {
+                        gridApi.setGridOption('rowData', data);
+                    });
+            } else {
+                Swal.fire('Error!', data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Error!', 'Failed to update user.', 'error');
+        });
+    });
+
+    // Delete User Function
+    function deleteUser(userId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/app/admin/api/users/${userId}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Deleted!', data.message, 'success');
+                        // Reload grid data
+                        fetch('/app/admin/api/users/')
+                            .then(response => response.json())
+                            .then(data => {
+                                gridApi.setGridOption('rowData', data);
+                            });
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error!', 'Failed to delete user.', 'error');
+                });
+            }
+        });
+    }
+
+    // Get CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const sidebar = document.getElementById('sidebarColumn');
+    const toggleBtn = document.getElementById('toggleSidebar');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+    }
+
+</script>
+
+{% endblock %}
+

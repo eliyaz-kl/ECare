@@ -1,0 +1,566 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-0">
+    <div class="d-flex">
+        <!-- Sidebar Spacer (Representing the 260px margin) -->
+        <div class="sidebar-spacer d-none d-lg-block"></div>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1 pt-5 min-vh-100">
+            <div class="px-4 pb-5">
+
+                <!-- Header Section -->
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="mb-4">
+                        <nav aria-label="breadcrumb" class="mb-1">
+                            <ol class="breadcrumb mb-0" style="font-size: 12px; font-weight: 600;">
+                                <li class="breadcrumb-item text-secondary">User Management</li>
+                                <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Manage Groups
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="h3 fw-bold mb-1">User Groups</h1>
+                        <p class="text-muted small">Configure Groups of system user.</p>
+                    </div>
+
+                </div>
+
+                <!-- Skeleton Loader -->
+                <div id="skeleton-loader" class="row">
+                    <div class="col-3">
+                        <div class="card border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 8px;">
+                            <div class="card-body p-4">
+                                <div class="skeleton-header mb-4">
+                                    <div class="skeleton skeleton-icon"></div>
+                                    <div class="skeleton skeleton-title"></div>
+                                </div>
+                                <div class="skeleton skeleton-button mb-4"></div>
+                                <div class="skeleton skeleton-item mb-2"></div>
+                                <div class="skeleton skeleton-item mb-2"></div>
+                                <div class="skeleton skeleton-item mb-2"></div>
+                                <div class="skeleton skeleton-item mb-2"></div>
+                                <div class="skeleton skeleton-item"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="card border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 8px;">
+                            <div class="card-body p-4">
+                                <div class="skeleton-header mb-4">
+                                    <div class="skeleton skeleton-icon"></div>
+                                    <div class="skeleton skeleton-title"></div>
+                                </div>
+                                <div class="row g-4">
+                                    <div class="col-5">
+                                        <div class="skeleton skeleton-input mb-2"></div>
+                                        <div class="skeleton skeleton-box"></div>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column justify-content-center">
+                                        <div class="skeleton skeleton-button mx-auto mb-3 w-50"></div>
+                                        <div class="skeleton skeleton-button mx-auto w-50"></div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="skeleton skeleton-input mb-2"></div>
+                                        <div class="skeleton skeleton-box"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="content" style="display: none;">
+                    <div class="col-3">
+                        <div class="card border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 8px;">
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary" style="font-size: 24px;">shield_person</span>
+                                    <h2 class="h5 mb-0 fw-bold text-dark">Groups</h2>
+                                </div>
+
+                                <button id="addGroupBtn" class="btn text-white d-flex align-items-center gap-2"
+                                        style="background:var(--primary-container); border-radius:12px; font-size: 12px;">
+                        <span class="material-symbols-outlined">
+                            groups_3
+                        </span>
+                                    <span class="menu-text">
+                            Add New
+                        </span>
+                                </button>
+                                </div>
+
+
+
+                                <!-- Add Group Input (Hidden by default) -->
+                                <div id="addGroupInput" class="mb-3" style="display: none;">
+                                    <div class="d-flex gap-2">
+                                        <input type="text" id="newGroupName" class="form-control form-control-sm" placeholder="Enter group name..." style="font-size: 13px;">
+                                        <button id="cancelGroupBtn" class="btn btn-outline-secondary btn-sm" style="white-space: nowrap;">
+                                            <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+                                        </button>
+                                        <button id="saveGroupBtn" class="btn btn-primary btn-sm px-3" style="white-space: nowrap;">Save</button>
+                                    </div>
+                                </div>
+
+                                <div id="groupsList">
+                                    <button class="group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn btn-primary position-relative">
+                                        <span class="flex-grow-1">Dashboard</span>
+                                        <span class="material-symbols-outlined delete-icon text-white" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+                                    </button>
+                                    <button class="group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn bg-secondary-subtle position-relative">
+                                        <span class="flex-grow-1">Task Supervisor</span>
+                                        <span class="material-symbols-outlined delete-icon text-danger" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+                                    </button>
+                                    <button class="group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn bg-secondary-subtle position-relative">
+                                        <span class="flex-grow-1">Task Agent</span>
+                                        <span class="material-symbols-outlined delete-icon text-danger" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+                                    </button>
+                                    <button class="group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn bg-secondary-subtle position-relative">
+                                        <span class="flex-grow-1">Quality Supervisor</span>
+                                        <span class="material-symbols-outlined delete-icon text-danger" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+                                    </button>
+                                    <button class="group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn bg-secondary-subtle position-relative">
+                                        <span class="flex-grow-1">Quality Agent</span>
+                                        <span class="material-symbols-outlined delete-icon text-danger" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="card border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 8px;">
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center justify-content-between ">
+                                    <div class="d-flex align-items-center gap-2 mb-4 border-bottom pb-3">
+                                        <span class="material-symbols-outlined text-primary" style="font-size: 24px;">shield_person</span>
+                                        <h2 class="h5 mb-0 fw-bold text-dark">User Permissions</h2>
+                                    </div>
+
+                                    <a href="#"
+                                       class="btn text-white d-flex align-items-center gap-2 mb-4 border-bottom"
+                                       style="background:var(--primary-container); border-radius:12px;">
+                            <span class="material-symbols-outlined">
+                                person_add
+                            </span>
+                                        <span class="menu-text">
+                                Save
+                            </span>
+                                    </a>
+                                </div>
+
+
+                                <div class="row g-4 align-items-center">
+
+                                    <div class="col-12 col-lg-5">
+                                        <div class="d-flex flex-column gap-2">
+                                            <label class="form-label text-secondary fw-bold mb-0"
+                                                   style="font-size: 11px; letter-spacing: 0.05em;">AVAILABLE USER
+                                                PERMISSIONS</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><span
+                                                        class="material-symbols-outlined fs-6">search</span></span>
+                                                <input type="text" id="availableSearch"
+                                                       class="form-control bg-light border-0 shadow-none"
+                                                       placeholder="Filter permissions..." style="font-size: 14px;">
+                                            </div>
+
+                                            <select id="availableBox"
+                                                    class="form-select border shadow-none p-0 overflow-auto" size="10"
+                                                    multiple style="height: 280px; font-size: 13px;">
+                                                <option class="p-2 border-bottom px-3" value="1">Content types | Can
+                                                    change content type
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="2">Content types | Can
+                                                    delete content type
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="3">Customers | Can add
+                                                    customer
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="4">Customers | Can change
+                                                    customer
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="5">Engagements | Can add
+                                                    engagement
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="6">Sessions | Can add
+                                                    session
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="7">Sessions | Can change
+                                                    session
+                                                </option>
+                                                <option class="p-2 border-bottom px-3" value="8">Sessions | Can delete
+                                                    session
+                                                </option>
+                                            </select>
+
+                                            <button type="button" id="btnChooseAll"
+                                                    class="btn btn-link btn-sm text-decoration-none p-0 text-primary fw-bold d-flex align-items-center gap-1 mt-1">
+                                                Choose all <span class="material-symbols-outlined fs-6">arrow_circle_right</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-lg-2">
+                                        <div class="d-flex flex-row flex-lg-column justify-content-center align-items-center gap-3">
+                                            <button type="button" id="moveRight"
+                                                    class="btn btn-primary rounded-2 d-flex align-items-center justify-content-center shadow-sm"
+                                                    style="width: 40px; height: 40px;">
+                                                <span class="material-symbols-outlined">line_end_arrow_notch</span>
+                                            </button>
+                                            <button type="button" id="moveLeft"
+                                                    class="btn btn-outline-secondary rounded-2 d-flex align-items-center justify-content-center shadow-sm"
+                                                    style="width: 40px; height: 40px;">
+                                                <span class="material-symbols-outlined">line_start_arrow_notch</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-lg-5">
+                                        <div class="d-flex flex-column gap-2">
+                                            <label class="form-label text-secondary fw-bold mb-0"
+                                                   style="font-size: 11px; letter-spacing: 0.05em;">CHOSEN USER
+                                                PERMISSIONS</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-primary text-white border-0"><span
+                                                        class="material-symbols-outlined fs-6">check_circle</span></span>
+                                                <input type="text" id="chosenSearch"
+                                                       class="form-control bg-light border-0 shadow-none"
+                                                       placeholder="Search chosen..." style="font-size: 14px;">
+                                            </div>
+
+                                            <select id="chosenBox"
+                                                    class="form-select border shadow-none p-0 overflow-auto" size="10"
+                                                    multiple
+                                                    style="height: 280px; font-size: 13px; background-color: #fdfdfd;">
+                                            </select>
+
+                                            <button type="button" id="btnRemoveAll"
+                                                    class="btn btn-link btn-sm text-decoration-none p-0 text-danger fw-bold d-flex align-items-center gap-1 mt-1 ms-auto">
+                                                <span class="material-symbols-outlined fs-6">cancel</span> Remove all
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 p-3 rounded bg-light border-start border-primary border-4">
+                                    <p class="text-muted mb-0 small d-flex align-items-center gap-2">
+                                        <span class="material-symbols-outlined fs-6 text-primary">info</span>
+                                        Specific permissions for this user. Hold down "Control", or "Command" on a Mac,
+                                        to select more than one.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    </main>
+</div>
+
+</div>
+
+<style>
+    /* Skeleton Loader Styles */
+    .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        border-radius: 4px;
+    }
+
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    .skeleton-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .skeleton-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .skeleton-title {
+        width: 120px;
+        height: 20px;
+    }
+
+    .skeleton-button {
+        width: 100%;
+        height: 42px;
+        border-radius: 12px;
+    }
+
+    .skeleton-item {
+        width: 100%;
+        height: 36px;
+        border-radius: 4px;
+    }
+
+    .skeleton-input {
+        width: 100%;
+        height: 38px;
+        border-radius: 4px;
+    }
+
+    .skeleton-box {
+        width: 100%;
+        height: 280px;
+        border-radius: 4px;
+    }
+
+    .skeleton-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+</style>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide skeleton loader and show content after a short delay
+        setTimeout(function() {
+            document.getElementById('skeleton-loader').style.display = 'none';
+            document.getElementById('content').style.display = 'flex';
+        }, 800);
+
+        const availableBox = document.getElementById('availableBox');
+        const chosenBox = document.getElementById('chosenBox');
+        const moveRight = document.getElementById('moveRight');
+        const moveLeft = document.getElementById('moveLeft');
+        const btnChooseAll = document.getElementById('btnChooseAll');
+        const btnRemoveAll = document.getElementById('btnRemoveAll');
+
+        // Move logic
+        const moveOptions = (from, to) => {
+            const selected = Array.from(from.selectedOptions);
+            selected.forEach(opt => {
+                to.appendChild(opt);
+                opt.selected = false;
+            });
+        };
+
+        moveRight.onclick = () => moveOptions(availableBox, chosenBox);
+        moveLeft.onclick = () => moveOptions(chosenBox, availableBox);
+
+        btnChooseAll.onclick = () => {
+            Array.from(availableBox.options).forEach(opt => chosenBox.appendChild(opt));
+        };
+
+        btnRemoveAll.onclick = () => {
+            Array.from(chosenBox.options).forEach(opt => availableBox.appendChild(opt));
+        };
+
+        // Double click support
+        availableBox.ondblclick = () => moveOptions(availableBox, chosenBox);
+        chosenBox.ondblclick = () => moveOptions(chosenBox, availableBox);
+
+        // Search Logic
+        const filter = (input, select) => {
+            const val = input.value.toLowerCase();
+            Array.from(select.options).forEach(opt => {
+                opt.style.display = opt.text.toLowerCase().includes(val) ? 'block' : 'none';
+            });
+        };
+
+        document.getElementById('availableSearch').oninput = function() { filter(this, availableBox); };
+        document.getElementById('chosenSearch').oninput = function() { filter(this, chosenBox); };
+
+        // Add Group Functionality
+        const addGroupBtn = document.getElementById('addGroupBtn');
+        const addGroupInput = document.getElementById('addGroupInput');
+        const newGroupName = document.getElementById('newGroupName');
+        const cancelGroupBtn = document.getElementById('cancelGroupBtn');
+        const saveGroupBtn = document.getElementById('saveGroupBtn');
+        const groupsList = document.getElementById('groupsList');
+
+        // Load groups from database on page load
+        function loadGroups() {
+            fetch('/app/admin/api/groups/')
+                .then(response => response.json())
+                .then(groups => {
+                    groupsList.innerHTML = ''; // Clear existing groups
+                    groups.forEach((group, index) => {
+                        createGroupButton(group, index === 0);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading groups:', error);
+                    Swal.fire('Error!', 'Failed to load groups.', 'error');
+                });
+        }
+
+        // Create group button element
+        function createGroupButton(group, isPrimary = false) {
+            const newGroupBtn = document.createElement('button');
+            newGroupBtn.className = `group-item d-flex align-items-center justify-content-between w-100 text-start mb-2 btn ${isPrimary ? 'btn-primary' : 'bg-secondary-subtle'} position-relative`;
+            newGroupBtn.setAttribute('data-group-id', group.id);
+            newGroupBtn.innerHTML = `
+                <span class="flex-grow-1">${group.name}</span>
+                <span class="material-symbols-outlined delete-icon ${isPrimary ? 'text-white' : 'text-danger'}" style="font-size: 18px; opacity: 0; transition: opacity 0.2s; cursor: pointer;">delete</span>
+            `;
+
+            // Attach hover and delete events
+            attachGroupEvents(newGroupBtn, group.id);
+
+            // Add to list
+            groupsList.appendChild(newGroupBtn);
+        }
+
+        // Show input field when Add Group button is clicked
+        addGroupBtn.addEventListener('click', function() {
+            addGroupInput.style.display = 'block';
+            newGroupName.focus();
+        });
+
+        // Cancel and hide input field
+        cancelGroupBtn.addEventListener('click', function() {
+            newGroupName.value = '';
+            addGroupInput.style.display = 'none';
+        });
+
+        // Save new group to database
+        saveGroupBtn.addEventListener('click', function() {
+            const groupName = newGroupName.value.trim();
+            if (!groupName) {
+                Swal.fire('Error!', 'Please enter a group name.', 'error');
+                return;
+            }
+
+            fetch('/app/admin/api/groups/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ name: groupName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Success!', data.message, 'success');
+                    // Reload groups list
+                    loadGroups();
+                    // Clear input and hide
+                    newGroupName.value = '';
+                    addGroupInput.style.display = 'none';
+                } else {
+                    Swal.fire('Error!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Failed to create group.', 'error');
+            });
+        });
+
+        // Allow Enter key to save group
+        newGroupName.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                saveGroupBtn.click();
+            }
+        });
+
+        // Function to attach hover and delete events
+        function attachGroupEvents(groupBtn, groupId) {
+            const deleteIcon = groupBtn.querySelector('.delete-icon');
+
+            // Show delete icon on hover
+            groupBtn.addEventListener('mouseenter', function() {
+                deleteIcon.style.opacity = '1';
+            });
+
+            groupBtn.addEventListener('mouseleave', function() {
+                deleteIcon.style.opacity = '0';
+            });
+
+            // Delete group on click of delete icon
+            deleteIcon.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent button click
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/app/admin/api/groups/${groupId}/delete/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Deleted!', data.message, 'success');
+                                // Reload groups list
+                                loadGroups();
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error!', 'Failed to delete group.', 'error');
+                        });
+                    }
+                });
+            });
+        }
+
+        // Get CSRF Token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Load groups when page loads
+        loadGroups();
+    });
+</script>
+
+{% endblock %}
+
