@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!--<h1>Davidshboard</h1>-->
+
+<!--<div class="card">-->
+
+<!--    <h3>Total Engagements</h3>-->
+
+<!--    <p>{{ total_engagements }}</p>-->
+
+<!--</div>-->
+
+<!--<div class="card">-->
+
+<!--    <h3>Pending Engagements</h3>-->
+
+<!--    <p>{{ pending_engagements }}</p>-->
+
+<!--</div>-->
+
+
+
+<div class="container-fluid p-0">
+    <div class="d-flex">
+    <!-- Sidebar Spacer (Representing the 260px margin) -->
+    <div class="sidebar-spacer d-none d-lg-block"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 pt-5 min-vh-100">
+        <div class="px-4 pb-5">
+
+            <!-- Header Section -->
+            <div class="mb-4">
+                <nav aria-label="breadcrumb" class="mb-1">
+                    <ol class="breadcrumb mb-0" style="font-size: 12px; font-weight: 600;">
+                        <li class="breadcrumb-item text-secondary">User Management</li>
+                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Create User</li>
+                    </ol>
+                </nav>
+                <h1 class="h3 fw-bold mb-1">Create New Enterprise User</h1>
+                <p class="text-muted small">Configure identity and access roles for a new system user.</p>
+            </div>
+
+            <!-- Bento Layout Container -->
+            <div class="row g-4">
+                <!-- Left Column: Form -->
+                <div class="col-12 col-lg-8">
+                    <div class="card border-0 shadow-sm p-4 bg-white">
+                        <form method="POST" action="{% url 'create-user' %}">
+                            {% csrf_token %}
+
+                            <!-- Section 1: Basic Info -->
+                            <section class="mb-5">
+                                <div class="d-flex align-items-center gap-2 mb-4 border-bottom pb-2">
+                                    <span class="material-symbols-outlined text-primary">person_add</span>
+                                    <h2 class="h5 mb-0 fw-bold">Basic Info</h2>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="first_name">FIRST NAME</label>
+                                        <input type="text" class="form-control form-control-underline p-3" id="first_name"
+                                               name="first_name" placeholder="Wahed" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="last_name">LAST NAME</label>
+                                        <input type="text" class="form-control form-control-underline p-3" id="last_name"
+                                               name="last_name" placeholder="Khan" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="username">USER NAME</label>
+                                        <input type="text" class="form-control form-control-underline p-3" id="username"
+                                               name="username" placeholder="Username" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="email">EMAIL ADDRESS</label>
+                                        <input type="email" class="form-control form-control-underline p-3" id="email"
+                                               name="email" placeholder="user@example.com" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="password">PASSWORD</label>
+                                        <input type="password" class="form-control form-control-underline p-3" id="password"
+                                               name="password" placeholder="••••••••" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="password2">CONFIRM PASSWORD</label>
+                                        <input type="password" class="form-control form-control-underline p-3" id="password2"
+                                               name="password2" placeholder="••••••••" required>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Section 2: Group Assignment -->
+                            <section class="mb-4">
+                                <div class="d-flex align-items-center gap-2 mb-4 border-bottom pb-2">
+                                    <span class="material-symbols-outlined text-primary">groups</span>
+                                    <h2 class="h5 mb-0 fw-bold">Group Assignment</h2>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;"
+                                               for="user_group">USER GROUP</label>
+                                        <select class="form-select form-control-underline p-3" id="user_group" name="user_group">
+                                            <option disabled selected value="">Select Group...</option>
+                                            {% for group in groups %}
+                                            <option value="{{ group.name }}">{{ group.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-secondary fw-bold" style="font-size: 11px;">Channels</label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="channel-btn bg-light border-1 border-secondary rounded-2 d-flex align-items-center justify-content-center" data-channel="twitter">
+                                                <div class="p-3 border-2 shadow-xl"><img src="{% static 'images/icon-x-twitter.png' %}" alt="Twitter" style="width: 24px; height: 24px;"></div>
+                                            </button>
+                                            <button type="button" class="channel-btn bg-light border-1 border-secondary rounded-2 d-flex align-items-center justify-content-center" data-channel="facebook">
+                                                <div class="p-3 border-2 shadow-xl"><img src="{% static 'images/icon-facebook.png' %}" alt="Facebook" style="width: 24px; height: 24px;"></div>
+                                            </button>
+                                            <button type="button" class="channel-btn bg-light border-1 border-secondary rounded-2 d-flex align-items-center justify-content-center" data-channel="line">
+                                                <div class="p-3 border-2 shadow-xl"><img src="{% static 'images/icon-line-chat.png' %}" alt="Line" style="width: 24px; height: 24px;"></div>
+                                            </button>
+                                            <button type="button" class="channel-btn bg-light border-1 border-secondary rounded-2 d-flex align-items-center justify-content-center" data-channel="linkedin">
+                                                <div class="p-3 border-2 shadow-xl"><img src="{% static 'images/icon-linkedin.png' %}" alt="LinkedIn" style="width: 24px; height: 24px;"></div>
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="channels" id="selectedChannels" value="">
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Actions -->
+                            <div class="d-flex justify-content-end gap-3 pt-4 border-top">
+                                <a href="{% url 'users-list' %}" class="btn btn-outline-secondary px-4 fw-bold border-0">Cancel</a>
+                                <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm" style="background-color: #004ac6;">
+                                    Create User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right Column: Contextual Card -->
+                <div class="col-12 col-lg-4">
+                    <div class="card border-0 p-4" style="background-color: #2563eb; color: white;">
+                        <div class="d-flex gap-3">
+                            <span class="material-symbols-outlined"
+                                  style="font-variation-settings: 'FILL' 1;">info</span>
+                            <div>
+                                <h3 class="h6 fw-bold mb-2">Role Hierarchy</h3>
+                                <p class="small mb-0 opacity-75">Admins have full read/write access. Editors can modify
+                                    content within assigned groups. Viewers are restricted to read-only logs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .channel-btn {
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .channel-btn.selected {
+        background-color: #004ac6 !important;
+        color: white;
+    }
+
+    .channel-btn.selected img {
+        filter: brightness(0) invert(1);
+    }
+</style>
+
+<script>
+    // Channel selection functionality
+    const channelButtons = document.querySelectorAll('.channel-btn');
+    const selectedChannelsInput = document.getElementById('selectedChannels');
+    let selectedChannels = [];
+
+    channelButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const channel = this.getAttribute('data-channel');
+
+            // Toggle selected class
+            this.classList.toggle('selected');
+
+            // Update selected channels array
+            if (this.classList.contains('selected')) {
+                selectedChannels.push(channel);
+            } else {
+                selectedChannels = selectedChannels.filter(ch => ch !== channel);
+            }
+
+            // Update hidden input value
+            selectedChannelsInput.value = selectedChannels.join(',');
+        });
+    });
+</script>
+
+{% endblock %}
+

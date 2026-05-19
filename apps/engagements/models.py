@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 from apps.customers.models import Customer
 
@@ -85,7 +85,7 @@ class Engagement(models.Model):
 
 
     assigned_agent = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
         on_delete=models.SET_NULL

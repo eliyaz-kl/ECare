@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class EngagementsConfig(AppConfig):
+class AdminConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.engagements'
+    name = 'apps.admin'
+    label = 'apps_admin'

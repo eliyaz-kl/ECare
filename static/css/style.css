@@ -1070,3 +1070,36 @@
     padding: 32px 20px;
   }
 }
+
+
+        .form-control-underline {
+            background-color: #f2f3ff !important;
+            border: none;
+        }
+        .form-control-underline:focus {
+            border-bottom-color: #004ac6;
+            outline: 1px solid blue;
+            box-shadow: none;
+        }
+
+            /* Remove default Bootstrap background-image arrow for multiple selects */
+    .form-select[multiple], .form-select[size]:not([size="1"]) {
+        background-image: none !important;
+        padding-right: 0 !important;
+    }
+
+    /* Modern Option Hover Styling */
+    #availableBox option, #chosenBox option {
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    #availableBox option:hover, #chosenBox option:hover {
+        background-color: #f2f3ff !important;
+    }
+
+    /* Active Selection Color */
+    #availableBox option:checked, #chosenBox option:checked {
+        background-color: #004ac6 !important;
+        color: white !important;
+    }
