@@ -485,6 +485,17 @@
             border-top-left-radius: 0;
         }
 
+        .animated-message {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .animated-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .message-bubble-agent {
             background: var(--primary-container);
             color: var(--on-primary-container);
@@ -1192,7 +1203,7 @@
                             <div class="flex-grow-1 overflow-auto custom-scrollbar p-3 d-flex flex-column gap-4">
 
                                 <!-- MESSAGE -->
-                                <div class="d-flex flex-column gap-1" style="max-width:90%;">
+                                <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
 
                                     <div class="d-flex align-items-center gap-2">
 
@@ -1219,7 +1230,7 @@
                                 </div>
 
                                 <!-- AGENT -->
-                                <div class="d-flex flex-column gap-1 ms-auto align-items-end" style="max-width:90%;">
+                                <div class="d-flex flex-column gap-1 ms-auto align-items-end animated-message" style="max-width:90%;">
 
                                     <div class="d-flex align-items-center gap-2">
 
@@ -1246,7 +1257,7 @@
                                 </div>
 
                                 <!-- MESSAGE -->
-                                <div class="d-flex flex-column gap-1" style="max-width:90%;">
+                                <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
 
                                     <div class="d-flex align-items-center gap-2">
 
@@ -1706,6 +1717,14 @@
             sidebar.classList.toggle('collapsed');
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.animated-message');
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    msg.classList.add('show');
+                }, index * 600); // 600ms delay between each message
+            });
+        });
     </script>
 
 </body>
