@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps.customers',
     'apps.engagements',
     'apps.integrations',
-    'apps.admin',
+    'apps.accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -132,4 +133,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Custom User Model
-AUTH_USER_MODEL = 'apps_admin.User'
+AUTH_USER_MODEL = 'accounts.User'

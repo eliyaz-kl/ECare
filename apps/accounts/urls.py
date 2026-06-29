@@ -3,8 +3,9 @@ from . import views
 
 
 urlpatterns = [
-    path('create-user/', views.create_user, name='create-user'),
+    # path('create-user/', views.create_user, name='create-user'),
     path('users/', views.users_list, name='users-list'),
+    path('users/create/', views.users_list, name='create-user'),
     path('api/users/', views.users_api, name='users-api'),
     path('api/users/<int:user_id>/', views.get_user_details, name='get-user-details'),
     path('api/users/<int:user_id>/edit/', views.edit_user_details, name='edit-user-details'),

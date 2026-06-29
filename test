@@ -1,3 +1,45 @@
 python manage.py startapp engagements apps/engagements
 python manage.py startapp customers apps/customers
 s
+
+project structure:
+ecare/
+│
+├── apps/
+│   ├── accounts/
+│   │     models.py
+│   │     serializers.py
+│   │     views.py
+│   │     urls.py
+│   │     permissions.py
+│   │
+│   ├── tickets/
+│   │     models.py
+│   │     services.py
+│   │     serializers.py
+│   │
+│   ├── customers/
+│   │
+│   ├── engagements/
+│   │
+│   ├── integrations/
+│   │
+│   ├── reports/
+│   │
+│   ├── dashboard/
+│   │
+│   └── common/
+│         models.py
+│         utils.py
+│         constants.py
+│
+├── config/
+│      settings.py
+│      urls.py
+│      asgi.py
+│      wsgi.py
+│
+├── media/
+├── static/
+├── templates/
+└── manage.py

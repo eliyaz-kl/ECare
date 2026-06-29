@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 import json
-from .user.models import User
-from .user.serializers import UserCreateSerializer, UserSerializer
+from .models import User
+from .serializers import UserCreateSerializer, UserSerializer
 
 
 @login_required
