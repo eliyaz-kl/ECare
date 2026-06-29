@@ -1,352 +1,471 @@
-{% extends 'base.html' %} {% block content %} <div class="container-fluid">
-  <div class="row g-0">
-    <!-- CONTENT COLUMN -->
-    <div class="col content-area">
-      <div class="row h-100 m-0">
-        <!-- HEADER -->
-        <header class="col-12 header-bar d-flex align-items-center justify-content-between shadow-sm sticky-top px-3">
-          <div class="d-flex align-items-center gap-4">
-            <div class="position-relative">
-              <span class="material-symbols-outlined search-icon">search</span>
-              <input type="text" class="form-control search-input" placeholder="Search Tickets..." style="width:380px;">
-            </div>
-          </div>
-        </header>
-        <div class="row h-100 p-3 m-0">
-          <!-- Ticket Details -->
-          <div class="col-6">
-            <div class="surface-card rounded-4 overflow-hidden shadow-soft">
-              <!-- CARD HEADER -->
-              <div class="bg-surface-soft border-bottom px-4 py-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                  <!-- LEFT -->
-                  <div class="d-flex align-items-center gap-3">
-                    <span class="material-symbols-outlined text-primary"> confirmation_number </span>
-                    <div class="ticket-title"> #{{ engagement.request_number }}
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- CONTENT COLUMN -->
+        <div class="col content-area">
+            <div class="row h-100 m-0">
+                <!-- HEADER -->
+                <header class="col-12 header-bar d-flex align-items-center justify-content-between shadow-sm sticky-top px-3">
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="position-relative">
+                            <span class="material-symbols-outlined search-icon">search</span>
+                            <input type="text" class="form-control search-input" placeholder="Search Tickets..."
+                                   style="width:380px;">
+                        </div>
                     </div>
-                  </div>
-                  <!-- RIGHT -->
-                  <div class="d-flex align-items-center gap-2">
+                </header>
+                <div class="row h-100 p-3 m-0">
+                    <!-- Ticket Details -->
+                    <div class="col-6">
+                        <div class="surface-card rounded-4 overflow-hidden shadow-md"
+                             style="background-color: rgba(0,0,0,0.02)">
+                            <!-- CARD HEADER -->
+                            <div class="bg-surface-soft border-bottom px-4 py-3">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                    <!-- LEFT -->
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary"> confirmation_number </span>
+                                        <div class="ticket-title"> #{{ engagement.request_number }}
+                                        </div>
+                                    </div>
+                                    <!-- RIGHT -->
+                                    <div class="d-flex align-items-center gap-2">
                     <span class="badge rounded-pill px-3 py-2" style="background:#d0e1fb;color:#54647a;">
-                      <span class="d-inline-block rounded-circle me-1" style="width:6px;height:6px;background:#2563eb;"></span>
+                      <span class="d-inline-block rounded-circle me-1"
+                            style="width:6px;height:6px;background:#2563eb;"></span>
                       {{ engagement.status }}
                     </span>
-                    <button class="btn btn-light border-0">
-                      <span class="material-symbols-outlined"> more_vert </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- CARD BODY -->
-              <div class="p-4">
-                <div class="row g-4">
-                  <!-- LEFT COLUMN -->
-                  <div class="col-md-6">
-                    <div class="mb-4">
-                      <div class="label-caps mb-2"> Problem Code / Category </div>
-                      <div class="ticket-category-showcase">
-                        <span class="material-symbols-outlined"> category </span>
-                        <div>
-                          <div class="ticket-field-helper">Issue category</div>
-                          <div class="ticket-category-value">{{ engagement.get_category_display }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row g-3">
-                      <!-- PRIORITY -->
-                      <div class="col-6">
-                        <div class="label-caps mb-2"> Priority </div>
-                        <span class="ticket-priority-showcase ticket-priority-{{ engagement.priority|lower }}">
+                                        <button class="btn btn-light border-0">
+                                            <span class="material-symbols-outlined"> more_vert </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CARD BODY -->
+                            <div class="p-4">
+                                <div class="row g-4">
+                                    <!-- LEFT COLUMN -->
+                                    <div class="col-md-6">
+                                        <div class="mb-4">
+                                            <div class="label-caps mb-2"> Problem Code / Category</div>
+                                            <div class="ticket-category-showcase">
+                                                <span class="material-symbols-outlined"> category </span>
+                                                <div>
+                                                    <div class="ticket-field-helper">Issue category</div>
+                                                    <div class="ticket-category-value">
+                                                        {{  engagement.get_category_display }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3">
+                                            <!-- PRIORITY -->
+                                            <div class="col-6">
+                                                <div class="label-caps mb-2"> Priority</div>
+                                                <span class="ticket-priority-showcase ticket-priority-{{ engagement.priority|lower }}">
                           <span class="ticket-priority-dot"></span>
                           {{ engagement.priority }}
                         </span>
-                      </div>
-                      <!-- SLA -->
-                      <div class="col-6">
-                        <div class="label-caps mb-2"> SLA Remaining </div>
-                        <div class="d-flex align-items-center gap-1 fw-bold text-danger fs-14">
-                          <span class="material-symbols-outlined" style="font-size:16px;"> schedule </span>
-                          {{ engagement.sla|date:"H:i" }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- RIGHT COLUMN -->
-                  <div class="col-md-6">
-                    <div class="bg-surface-soft border rounded-4 p-3 h-100 d-flex flex-column justify-content-center">
-                      <div class="d-flex align-items-center gap-3 mb-3">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkV8uLlkNZZ4l58GvB6vY1yxqfOUpSTTRALPKqQtNt-ie76lFxFVdrVy0bwUHJbx3iRi0YiAHjXkEbwDOtWzYLL_shtGwZLYu0ku2vRRQw2XhD_j0VDzoajwGPFrOS5GmjkoCQuWwVQE_mQ5aJsFtQoU3G3Mt93gm3gmVXb-k6QQhwKdOYzVlNCmFTAUiGCKQaq_9uVn7Xg53SD6la-rMC9ciM0_XpE9XSmTljMQTJKevjPas-6R8UpkO3qS3x9Q-HwLhW_DKvhwA" class="rounded-circle border border-2 border-white shadow-sm" width="52" height="52">
-                        <div class="flex-grow-1">
-                          <div class="d-flex align-items-start justify-content-between gap-2">
-                            <div>
-                              <div class="ticket-customer-display-name">
-                                {{ engagement.customer.display_name|default:engagement.customer.username }}
-                              </div>
-                              <div class="ticket-customer-username">
-                                @{{ engagement.customer.username }}
-                              </div>
+                                            </div>
+                                            <!-- SLA -->
+                                            <div class="col-6">
+                                                <div class="label-caps mb-2"> SLA Remaining</div>
+                                                <div class="d-flex align-items-center gap-1 fw-bold text-danger fs-14">
+                                                    <span class="material-symbols-outlined" style="font-size:16px;"> schedule </span>
+                                                    {{ engagement.sla|date:"H:i" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- RIGHT COLUMN -->
+                                    <div class="col-md-6">
+                                        <div class="bg-surface-soft bg-white border rounded-4 p-3 h-100 d-flex flex-column justify-content-center">
+                                            <div class="d-flex align-items-center gap-3 mb-3">
+                                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkV8uLlkNZZ4l58GvB6vY1yxqfOUpSTTRALPKqQtNt-ie76lFxFVdrVy0bwUHJbx3iRi0YiAHjXkEbwDOtWzYLL_shtGwZLYu0ku2vRRQw2XhD_j0VDzoajwGPFrOS5GmjkoCQuWwVQE_mQ5aJsFtQoU3G3Mt93gm3gmVXb-k6QQhwKdOYzVlNCmFTAUiGCKQaq_9uVn7Xg53SD6la-rMC9ciM0_XpE9XSmTljMQTJKevjPas-6R8UpkO3qS3x9Q-HwLhW_DKvhwA"
+                                                     class="rounded-circle border border-2 border-white shadow-sm"
+                                                     width="52" height="52">
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-start justify-content-between gap-2">
+                                                        <div>
+                                                            <div class="ticket-customer-display-name">
+                                            {{ engagement.customer.display_name|default:engagement.customer.username }}
+                                                            </div>
+                                                            <div class="ticket-customer-username">
+                                                                @{{ engagement.customer.username }}
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn" type="button" data-bs-toggle="offcanvas"
+                                                                data-bs-target="#offcanvasExample"
+                                                                aria-controls="offcanvasExample">
+                                                            <i class="fa-solid fa-circle-info text-lg"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="text-muted-custom fs-14"> Premium Account</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2 text-muted-custom fs-12">
+                                                <span class="material-symbols-outlined" style="font-size:14px;"> Contact_Mail </span>
+                                                {{ engagement.customer.get_platform_display }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FULL WIDTH DESCRIPTION -->
+                                    <div class="col-12">
+                                        <div class="label-caps mb-2"> Ticket Details</div>
+                                        <div class="border rounded-4 p-4 bg-white shadow-sm"
+                                             style="min-height:160px;line-height:1.8;">
+                                            {{ engagement.content }}
+                                        </div>
+                                    </div>
+                                    <!-- PRIVATE NOTE -->
+                                    <div class="col-12">
+                                        <div class="private-note rounded-end-4 p-4">
+                                            <div class="d-flex align-items-center gap-2 mb-2"
+                                                 style="color:var(--purple);">
+                                                <span class="material-symbols-outlined"
+                                                      style="font-size:16px;"> lock </span>
+                                                <span class="label-caps mb-0" style="color:var(--purple);"> Internal Private Note </span>
+                                            </div>
+                                            <p class="mb-0 fst-italic fs-14"> Agent Note: I've checked the logs, and the
+                                                cancellation request was indeed processed on the 11th, but the billing
+                                                engine had already locked the batch. Refund is technically
+                                                justified. </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                              <i class="fa-solid fa-circle-info text-lg"></i>
-                            </button>
-                          </div>
-                          <div class="text-muted-custom fs-14"> Premium Account </div>
+                            <!-- FOOTER -->
+                            <div class="bg-surface-soft border-top px-4 py-3">
+                                <div class="d-flex align-items-center gap-4 flex-wrap">
+                                    <button class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
+                                        <span class="material-symbols-outlined"
+                                              style="font-size:18px;"> attachment </span> 3 Attachments
+                                    </button>
+                                    <button class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
+                                        <span class="material-symbols-outlined" style="font-size:18px;"> history </span>
+                                        Activity Log
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="d-flex align-items-center gap-2 text-muted-custom fs-12">
-                        <span class="material-symbols-outlined" style="font-size:14px;"> Contact_Mail </span> {{ engagement.customer.get_platform_display }}
-                      </div>
                     </div>
-                  </div>
-                  <!-- FULL WIDTH DESCRIPTION -->
-                  <div class="col-12">
-                    <div class="label-caps mb-2"> Ticket Details </div>
-                    <div class="border rounded-4 p-4 bg-white shadow-sm" style="min-height:160px;line-height:1.8;">
-                        {{ engagement.content }}
-                    </div>
-                  </div>
-                  <!-- PRIVATE NOTE -->
-                  <div class="col-12">
-                    <div class="private-note rounded-end-4 p-4">
-                      <div class="d-flex align-items-center gap-2 mb-2" style="color:var(--purple);">
-                        <span class="material-symbols-outlined" style="font-size:16px;"> lock </span>
-                        <span class="label-caps mb-0" style="color:var(--purple);"> Internal Private Note </span>
-                      </div>
-                      <p class="mb-0 fst-italic fs-14"> Agent Note: I've checked the logs, and the cancellation request was indeed processed on the 11th, but the billing engine had already locked the batch. Refund is technically justified. </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- FOOTER -->
-              <div class="bg-surface-soft border-top px-4 py-3">
-                <div class="d-flex align-items-center gap-4 flex-wrap">
-                  <button class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
-                    <span class="material-symbols-outlined" style="font-size:18px;"> attachment </span> 3 Attachments </button>
-                  <button class="btn btn-link text-decoration-none text-muted-custom p-0 d-flex align-items-center gap-2">
-                    <span class="material-symbols-outlined" style="font-size:18px;"> history </span> Activity Log </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- LEFT PANEL -->
-          <div class="col-6 bg-body p-0">
-            <div class="p-3 border-bottom border-outline bg-surface d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-2">
-                <span class="material-symbols-outlined text-primary-custom" style="font-size:20px;"> crossword </span>
-                <span class="fw-bold"> Channel: {{ engagement.customer.platform  }} </span>
-              </div>
-              <div>
-                <span class="status-pill" style="background:var(--secondary-container);color:var(--on-secondary-container);"> Public </span>
-              </div>
-            </div>
-            <div class="flex-grow-1 overflow-auto custom-scrollbar p-3 d-flex flex-column gap-4">
-              <!-- MESSAGE -->
-              <div class="d-flex flex-column gap-1" style="max-width:90%;">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fw-bold"> Alex Rivera </span>
-                  <span class="tiny-text text-muted-custom"> 10:42 AM </span>
-                </div>
-                <div class="message-bubble-user p-3">
-                  <p class="mb-0"> I'm having trouble with my recent order #4492. It's been stuck in 'Processing' for 3 days now. Can someone check the status? I need this by Friday. </p>
-                </div>
-              </div>
-              <!-- AGENT -->
-              <div class="d-flex flex-column gap-1 ms-auto align-items-end" style="max-width:90%;">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="tiny-text text-muted-custom"> 10:45 AM </span>
-                  <span class="fw-bold"> You (Agent) </span>
-                </div>
-                <div class="message-bubble-agent p-3">
-                  <p class="mb-0"> Hi Alex, I'm sorry for the delay! Let me look into that order for you right away. One moment while I pull up the warehouse logs. </p>
-                </div>
-              </div>
-              <!-- MESSAGE -->
-              <div class="d-flex flex-column gap-1" style="max-width:90%;">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fw-bold"> Alex Rivera </span>
-                  <span class="tiny-text text-muted-custom"> 10:46 AM </span>
-                </div>
-                <div class="message-bubble-user p-3">
-                  <p class="mb-0"> Thank you. I appreciate the quick response. It's a birthday gift so the timing is quite critical. </p>
-                </div>
-              </div>
-            </div>
-            <div class="surface-card">
-              <!-- AI -->
-              <div class="m-3 p-3 ai-suggestion d-flex flex-column gap-2">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="material-symbols-outlined text-primary-custom"> auto_awesome </span>
-                    <span class="fw-bold text-primary-custom"> AI Suggested Draft </span>
-                  </div>
-                  <span class="status-pill text-uppercase" style="background:var(--primary);color:var(--on-primary);letter-spacing:.08em;"> AI Suggestion </span>
-                </div>
-                <p class="mb-0 fst-italic" style="font-size:14px;color:var(--on-primary-fixed-variant);"> "Hi Alex, I've checked order #4492. It appears there was a brief inventory sync delay, but it's now marked as 'Ready for Dispatch'. I'll upgrade this to Priority Shipping for you to ensure it arrives by Friday." </p>
-              </div>
-              <!-- EDITOR -->
-              <div class="flex-grow-1 d-flex flex-column px-3 pb-3">
-                <div class="editor-toolbar d-flex align-items-center gap-2 py-2 border-bottom border-outline mb-3">
-                  <button>
-                    <span class="material-symbols-outlined">format_bold</span>
-                  </button>
-                  <button>
-                    <span class="material-symbols-outlined">format_italic</span>
-                  </button>
-                  <button>
-                    <span class="material-symbols-outlined">format_underlined</span>
-                  </button>
-                  <div class="vr mx-1"></div>
-                  <button>
-                    <span class="material-symbols-outlined">sentiment_satisfied</span>
-                  </button>
-                  <button>
-                    <span class="material-symbols-outlined">attach_file</span>
-                  </button>
-                  <button class="ms-auto">
-                    <span class="material-symbols-outlined">more_vert</span>
-                  </button>
-                </div>
-                <textarea class="editor-textarea" placeholder="Type your reply here..."></textarea>
-              </div>
-              <!-- FOOTER -->
-              <div class="p-3 border-top border-outline bg-surface d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                  <button class="primary-btn d-flex align-items-center gap-2">
-                    <span class="material-symbols-outlined"> send </span> Approve & Send </button>
-                  <button class="secondary-btn"> Edit </button>
-                </div>
-                <button class="escalate-btn d-flex align-items-center gap-2">
-                  <span class="material-symbols-outlined"> priority_high </span> Escalate </button>
-              </div>
-            </div>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-              <div class="flex-grow-1 overflow-auto custom-scrollbar p-4">
-                <!-- LIVE EXTRACTION -->
-                <section class="mb-4">
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h3 class="section-title mb-0">Live Extraction</h3>
-                    <span class="live-badge">Live</span>
-                  </div>
-                  <div class="card-custom p-3">
-                    <div class="mb-3">
-                      <div class="text-label mb-1">Active ID</div>
-                      <div class="fw-bold" style="color:var(--primary);"> Ticket #88492 </div>
-                    </div>
-                    <div class="row g-3">
-                      <div class="col-6">
-                        <div class="text-label mb-1">National ID</div>
-                        <div class="fw-medium" style="letter-spacing:.12em;"> ****-4567 </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="text-label mb-1">CIC</div>
-                        <div class="fw-medium"> 99283-A </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-                <!-- CRM MATCH -->
-                <section class="mb-4">
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h3 class="section-title mb-0">CRM Match</h3>
-                    <div class="d-flex align-items-center gap-1 px-2 py-1 rounded-pill" style="background:#dcfce7;color:#166534;font-size:12px;font-weight:500;">
-                      <span class="material-symbols-outlined" style="font-size:14px;font-variation-settings:'FILL' 1;"> verified </span> Verified
-                    </div>
-                  </div>
-                  <div class="crm-card p-3">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                      <div class="customer-avatar">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQZ_dfEgQCtUv1Id9WPcIkzuXYOZOB6S30sWyJkdXBprwgEUzqF1nO9BJs4hfrTyMj3JYwRKuwbZViqF2GffC5AVF4yaWcEvT8KuKrB7xWkSYRknjLRuwFENOhjs_WFOyG3DF9q0k84BkMXK5zQkuX0bk1541-K0zUo9U3kZXG9PW2jcdvu3kA9esfhxw98cR_bJmnIMgxX_mlt39dUf_Gz7Fu06VodiYLnyWxxIK9UeIP5Fece8OqDzUlaEg7099HgHxzGiUXvPk" class="w-100 h-100 object-fit-cover" alt="">
-                      </div>
-                      <div>
-                        <div class="fw-bold">Sarah Mitchell</div>
-                        <div class="text-small" style="color:var(--on-surface-variant);"> Enterprise Tier Customer </div>
-                      </div>
-                    </div>
-                    <div class="mb-4">
-                      <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="material-symbols-outlined" style="font-size:18px;color:var(--outline);"> call </span>
-                        <span class="text-small"> +1 (555) 012-3456 </span>
-                      </div>
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="material-symbols-outlined" style="font-size:18px;color:var(--outline);"> mail </span>
-                        <span class="text-small"> sarah.m@example.com </span>
-                      </div>
-                    </div>
-                    <div class="compare-box p-2 d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="material-symbols-outlined" style="font-size:20px;color:var(--primary);"> compare_arrows </span>
-                        <span class="fw-medium text-small" style="color:var(--primary);"> CIC Comparison </span>
-                      </div>
-                      <span class="compare-badge"> MATCH: 99283-A </span>
-                    </div>
-                  </div>
-                </section>
-                <!-- HISTORICAL -->
-                <section class="mb-4">
-                  <h3 class="section-title mb-3"> Historical Interactions </h3>
-                  <!-- ITEM -->
-                  <div class="timeline-item">
-                    <div class="timeline-line"></div>
-                    <div class="timeline-icon border border-2" style="border-color:var(--primary)!important;">
-                      <span class="material-symbols-outlined" style="font-size:12px;color:var(--primary);"> alternate_email </span>
-                    </div>
-                    <div class="timeline-card alt">
-                      <div class="d-flex justify-content-between align-items-start mb-1">
-                        <span class="text-label"> Oct 24, 2023 </span>
-                        <span style="font-size:12px;font-weight:500;color:var(--primary);"> #Billing </span>
-                      </div>
-                      <div class="text-small fw-medium"> Inquiry regarding latest invoice </div>
-                    </div>
-                  </div>
-                  <!-- ITEM -->
-                  <div class="timeline-item">
-                    <div class="timeline-line"></div>
-                    <div class="timeline-icon border border-2" style="border-color:var(--secondary)!important;">
-                      <span class="material-symbols-outlined" style="font-size:12px;color:var(--secondary);"> mail </span>
-                    </div>
-                    <div class="timeline-card">
-                      <div class="d-flex justify-content-between align-items-start mb-1">
-                        <span class="text-label"> Oct 15, 2023 </span>
-                        <span style="font-size:12px;font-weight:500;color:var(--secondary);"> #Technical </span>
-                      </div>
-                      <div class="text-small fw-medium"> API integration timeout errors </div>
-                    </div>
-                  </div>
-                  <!-- ITEM -->
-                  <div class="timeline-item pb-0">
-                    <div class="timeline-icon border border-2" style="border-color:var(--outline)!important;">
-                      <span class="material-symbols-outlined" style="font-size:12px;color:var(--outline);"> call </span>
-                    </div>
-                    <div class="timeline-card">
-                      <div class="d-flex justify-content-between align-items-start mb-1">
-                        <span class="text-label"> Sep 28, 2023 </span>
-                        <span style="font-size:12px;font-weight:500;color:var(--outline);"> #General </span>
-                      </div>
-                      <div class="text-small fw-medium"> Plan upgrade consultation </div>
-                    </div>
-                  </div>
-                </section>
-                <!-- PRIVATE NOTE -->
-                <section class="private-note p-3">
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="material-symbols-outlined" style="color:var(--tertiary);font-variation-settings:'FILL' 1;"> lock </span>
-                    <h3 class="mb-0" style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--tertiary);"> Private Agent Note </h3>
-                  </div>
-                  <p class="mb-0 fst-italic text-small" style="color:var(--on-surface-variant);"> Customer is highly sensitive to response times. Prioritize clear SLA timelines in all billing communications. </p>
-                </section>
-              </div>
-              <!-- FOOTER -->
-              <div class="footer-actions p-4 d-flex gap-2">
-                <button class="btn btn-primary-custom flex-grow-1 d-flex align-items-center justify-content-center gap-1">
-                  <span class="material-symbols-outlined" style="font-size:18px;"> edit </span> Edit CRM </button>
-                <button class="btn btn-icon-custom d-flex align-items-center justify-content-center">
-                  <span class="material-symbols-outlined"> more_horiz </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                    <!-- LEFT PANEL -->
+                    <div class="col-6 d-flex flex-column bg-body p-0 border border-secondary-subtle shadow-sm rounded"
+                         style="height:90vh;">
+                        <div class="p-3 border border-primary rounded-top bg-surface d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="material-symbols-outlined text-primary-custom" style="font-size:20px;"> crossword </span>
+                                <span class="fw-bold"> Channel: {{ engagement.customer.platform  }} </span>
+                            </div>
+                            <div>
+                                <span class="status-pill"
+                                      style="background:var(--secondary-container);color:var(--on-secondary-container);"> Public </span>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 overflow-auto custom-scrollbar p-3 ">
+                            <div class="d-flex flex-column gap-4" id="message-container">
+                                <!-- MESSAGE -->
+                                <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold"> {{ engagement.customer.display_name|default:engagement.customer.username }} </span>
+                                        <span class="tiny-text text-muted-custom"> {{ engagement.created_at|date:"h:i A" }} </span>
+                                    </div>
+                                    <div class="message-bubble-user p-3">
+                                        <p class="mb-0"> {{ engagement.content }} </p>
+                                    </div>
+                                </div>
+                                {% if engagement.final_response %}
+                                <!-- AGENT -->
+                                <div class="d-flex flex-column gap-1 ms-auto align-items-end animated-message"
+                                     style="max-width:90%;" id="agent-response-bubble">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="tiny-text text-muted-custom"> {{ engagement.updated_at|date:"h:i A" }} </span>
+                                        <span class="fw-bold"> {% if engagement.assigned_agent %}{{ engagement.assigned_agent.get_full_name|default:engagement.assigned_agent.username }} (Agent){% else %}You (Agent){% endif %} </span>
+                                    </div>
+                                    <div class="message-bubble-agent p-3">
+                                        <p class="mb-0"> {{ engagement.final_response }} </p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="surface-card" style="width:98%; margin: 0 auto;">
+                            <!-- AI -->
+                            <div class="m-3 ai-suggestion-block" style="cursor: pointer;" id="ai-suggestion-trigger">
+                                <div class="p-3 ai-suggestion d-flex flex-column gap-2">
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                            <div class="d-flex align-items-center">
+                                              <div class="sparkles">
+    <svg class="sparkle-1" width="18px" height="18px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <polygon fill="#6AC6E2" points="10.998167 0 7.25512415 7.09866667 0 10.8826667 7.25512415 14.9013333 10.998167 22 14.9758374 14.9013333 22 10.8826667 14.9758374 7.09866667"></polygon>
+    </svg>
+    <svg class="sparkle-2" width="12px" height="12px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <polygon fill="#00437F" points="7.99866689 0 5.27645392 5.16266667 0 7.91466667 5.27645392 10.8373333 7.99866689 16 10.8915181 10.8373333 16 7.91466667 10.8915181 5.16266667"></polygon>
+    </svg>
+    <svg class="dot-1" width="4" height="4">
+      <circle cx="3" cy="3" r="3" fill="#0086FF"/>
+    </svg>
   </div>
-</div> {% endblock %}
+                                              <span class="fw-bold text-primary-custom"> AI Suggested Draft </span>
+                                            </div>
+                                             <span class="status-pill text-uppercase"
+                                              style="background:var(--primary);color:var(--on-primary);letter-spacing:.08em;"> AI Suggestion </span>
+
+                                        </div>
+                                     <p class="mb-0 fst-italic ai-response-text"
+                                       style="font-size:14px;color:var(--on-primary-fixed-variant);"> "{{ engagement.ai_response|default:"AI is thinking..." }}" </p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- EDITOR -->
+                            <form method="POST" class="d-contents">
+                                {% csrf_token %}
+                                <div class="flex-grow-1 d-flex flex-column px-3 pb-3">
+                                    <!-- Include stylesheet -->
+                                    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+                                          rel="stylesheet"/>
+
+                                    <!-- Create the editor container -->
+                                    <div id="editor">
+
+                                    </div>
+
+                                </div>
+                                <!-- FOOTER -->
+                                <div class="p-3 border-top border-outline bg-surface d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="submit" class="primary-btn d-flex align-items-center gap-2" id="approve-send-btn">
+                                            <span class="material-symbols-outlined"> send </span> Approve & Send
+                                        </button>
+                                        <button type="button" class="secondary-btn"> Edit</button>
+                                    </div>
+                                    <button type="button" class="escalate-btn d-flex align-items-center gap-2">
+                                        <span class="material-symbols-outlined"> priority_high </span> Escalate
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+                             aria-labelledby="offcanvasExampleLabel">
+                            <div class="flex-grow-1 overflow-auto custom-scrollbar p-4">
+                                <!-- LIVE EXTRACTION -->
+                                <section class="mb-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <h3 class="section-title mb-0">Live Extraction</h3>
+                                        <span class="live-badge">Live</span>
+                                    </div>
+                                    <div class="card-custom p-3">
+                                        <div class="mb-3">
+                                            <div class="text-label mb-1">Active ID</div>
+                                            <div class="fw-bold" style="color:var(--primary);"> Ticket #88492</div>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-6">
+                                                <div class="text-label mb-1">National ID</div>
+                                                <div class="fw-medium" style="letter-spacing:.12em;"> ****-4567</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-label mb-1">CIC</div>
+                                                <div class="fw-medium"> 99283-A</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- CRM MATCH -->
+                                <section class="mb-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <h3 class="section-title mb-0">CRM Match</h3>
+                                        <div class="d-flex align-items-center gap-1 px-2 py-1 rounded-pill"
+                                             style="background:#dcfce7;color:#166534;font-size:12px;font-weight:500;">
+                                            <span class="material-symbols-outlined"
+                                                  style="font-size:14px;font-variation-settings:'FILL' 1;"> verified </span>
+                                            Verified
+                                        </div>
+                                    </div>
+                                    <div class="crm-card p-3">
+                                        <div class="d-flex align-items-center gap-3 mb-4">
+                                            <div class="customer-avatar">
+                                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQZ_dfEgQCtUv1Id9WPcIkzuXYOZOB6S30sWyJkdXBprwgEUzqF1nO9BJs4hfrTyMj3JYwRKuwbZViqF2GffC5AVF4yaWcEvT8KuKrB7xWkSYRknjLRuwFENOhjs_WFOyG3DF9q0k84BkMXK5zQkuX0bk1541-K0zUo9U3kZXG9PW2jcdvu3kA9esfhxw98cR_bJmnIMgxX_mlt39dUf_Gz7Fu06VodiYLnyWxxIK9UeIP5Fece8OqDzUlaEg7099HgHxzGiUXvPk"
+                                                     class="w-100 h-100 object-fit-cover" alt="">
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">Sarah Mitchell</div>
+                                                <div class="text-small" style="color:var(--on-surface-variant);">
+                                                    Enterprise Tier Customer
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                <span class="material-symbols-outlined"
+                                                      style="font-size:18px;color:var(--outline);"> call </span>
+                                                <span class="text-small"> +1 (555) 012-3456 </span>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="material-symbols-outlined"
+                                                      style="font-size:18px;color:var(--outline);"> mail </span>
+                                                <span class="text-small"> sarah.m@example.com </span>
+                                            </div>
+                                        </div>
+                                        <div class="compare-box p-2 d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="material-symbols-outlined"
+                                                      style="font-size:20px;color:var(--primary);"> compare_arrows </span>
+                                                <span class="fw-medium text-small" style="color:var(--primary);"> CIC Comparison </span>
+                                            </div>
+                                            <span class="compare-badge"> MATCH: 99283-A </span>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- HISTORICAL -->
+                                <section class="mb-4">
+                                    <h3 class="section-title mb-3"> Historical Interactions </h3>
+                                    <!-- ITEM -->
+                                    <div class="timeline-item">
+                                        <div class="timeline-line"></div>
+                                        <div class="timeline-icon border border-2"
+                                             style="border-color:var(--primary)!important;">
+                                            <span class="material-symbols-outlined"
+                                                  style="font-size:12px;color:var(--primary);"> alternate_email </span>
+                                        </div>
+                                        <div class="timeline-card alt">
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <span class="text-label"> Oct 24, 2023 </span>
+                                                <span style="font-size:12px;font-weight:500;color:var(--primary);"> #Billing </span>
+                                            </div>
+                                            <div class="text-small fw-medium"> Inquiry regarding latest invoice</div>
+                                        </div>
+                                    </div>
+                                    <!-- ITEM -->
+                                    <div class="timeline-item">
+                                        <div class="timeline-line"></div>
+                                        <div class="timeline-icon border border-2"
+                                             style="border-color:var(--secondary)!important;">
+                                            <span class="material-symbols-outlined"
+                                                  style="font-size:12px;color:var(--secondary);"> mail </span>
+                                        </div>
+                                        <div class="timeline-card">
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <span class="text-label"> Oct 15, 2023 </span>
+                                                <span style="font-size:12px;font-weight:500;color:var(--secondary);"> #Technical </span>
+                                            </div>
+                                            <div class="text-small fw-medium"> API integration timeout errors</div>
+                                        </div>
+                                    </div>
+                                    <!-- ITEM -->
+                                    <div class="timeline-item pb-0">
+                                        <div class="timeline-icon border border-2"
+                                             style="border-color:var(--outline)!important;">
+                                            <span class="material-symbols-outlined"
+                                                  style="font-size:12px;color:var(--outline);"> call </span>
+                                        </div>
+                                        <div class="timeline-card">
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <span class="text-label"> Sep 28, 2023 </span>
+                                                <span style="font-size:12px;font-weight:500;color:var(--outline);"> #General </span>
+                                            </div>
+                                            <div class="text-small fw-medium"> Plan upgrade consultation</div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- PRIVATE NOTE -->
+                                <section class="private-note p-3">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <span class="material-symbols-outlined"
+                                              style="color:var(--tertiary);font-variation-settings:'FILL' 1;"> lock </span>
+                                        <h3 class="mb-0"
+                                            style="font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--tertiary);">
+                                            Private Agent Note </h3>
+                                    </div>
+                                    <p class="mb-0 fst-italic text-small" style="color:var(--on-surface-variant);">
+                                        Customer is highly sensitive to response times. Prioritize clear SLA timelines
+                                        in all billing communications. </p>
+                                </section>
+                            </div>
+                            <!-- FOOTER -->
+                            <div class="footer-actions p-4 d-flex gap-2">
+                                <button class="btn btn-primary-custom flex-grow-1 d-flex align-items-center justify-content-center gap-1">
+                                    <span class="material-symbols-outlined" style="font-size:18px;"> edit </span> Edit
+                                    CRM
+                                </button>
+                                <button class="btn btn-icon-custom d-flex align-items-center justify-content-center">
+                                    <span class="material-symbols-outlined"> more_horiz </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+
+
+<!-- Include the Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.querySelectorAll('.animated-message');
+        messages.forEach((msg, index) => {
+            setTimeout(() => {
+                msg.classList.add('show');
+            }, index * 600); // 600ms delay between each message
+        });
+    });
+</script>
+<!-- Initialize Quill editor -->
+<script>
+    const quill = new Quill('#editor', {
+      theme: 'snow'
+    });
+
+    // AI Suggestion Typing Animation
+    document.getElementById('ai-suggestion-trigger').addEventListener('click', function() {
+        const textElement = this.querySelector('.ai-response-text');
+        // Extract text, removing quotes if they exist at start/end
+        let fullText = textElement.innerText.trim();
+        if (fullText.startsWith('"') && fullText.endsWith('"')) {
+            fullText = fullText.substring(1, fullText.length - 1);
+        }
+
+        quill.setText(''); // Clear editor
+        
+        let i = 0;
+        function typeWriter() {
+            if (i < fullText.length) {
+                // Remove existing cursor if any
+                const delta = quill.getContents();
+                quill.insertText(i, fullText.charAt(i));
+                i++;
+                setTimeout(typeWriter, 30); // Adjust typing speed here
+            } else {
+                // Animation finished
+            }
+        }
+        typeWriter();
+    });
+
+    // Approve & Send Animation
+    document.getElementById('approve-send-btn').addEventListener('click', function(e) {
+        const agentBubble = document.getElementById('agent-response-bubble');
+        if (agentBubble) {
+            agentBubble.classList.remove('show');
+            // Trigger animation after a short delay so it's visible if it was already shown 
+            // (though normally it would be shown on load)
+            setTimeout(() => {
+                agentBubble.classList.add('show');
+            }, 100);
+        }
+    });
+</script>
+{% endblock %}
