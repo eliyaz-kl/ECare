@@ -7,6 +7,7 @@ urlpatterns = [
     path('users/', views.users_list, name='users-list'),
     path('users/create/', views.users_list, name='create-user'),
     path('api/users/', views.users_api, name='users-api'),
+    path('api/me/status/', views.update_current_user_status, name='update-current-user-status'),
     path('api/users/<int:user_id>/', views.get_user_details, name='get-user-details'),
     path('api/users/<int:user_id>/edit/', views.edit_user_details, name='edit-user-details'),
     path('api/users/<int:user_id>/delete/', views.delete_user, name='delete-user'),

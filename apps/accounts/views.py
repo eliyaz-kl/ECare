@@ -56,6 +56,39 @@ def get_user_details(request, user_id):
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data)
 
+
+@login_required
+@require_http_methods(["POST"])
+def update_current_user_status(request):
+    """
+    API endpoint to update the logged-in user's availability status.
+    """
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid JSON payload.'
+        }, status=400)
+
+    status = data.get('status')
+    valid_statuses = {value for value, _label in User.Status.choices}
+
+    if status not in valid_statuses:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid status.'
+        }, status=400)
+
+    request.user.current_status = status
+    request.user.save(update_fields=['current_status', 'status_updated_at'])
+
+    return JsonResponse({
+        'success': True,
+        'status': request.user.current_status,
+        'label': request.user.get_current_status_display(),
+    })
+
 @login_required
 @require_http_methods(["POST", "PUT"])
 def edit_user_details(request, user_id):
@@ -255,7 +288,6 @@ def delete_group(request, group_id):
             'success': False,
             'message': str(e)
         }, status=400)
-
 
 
 

@@ -19,17 +19,18 @@ from django.db import models
 #     def __str__(self):
 #         return self.username
 
-class UserStatus(models.TextChoices):
-    AVAILABLE = "AVAILABLE", "Available"
-    LUNCH = "LUNCH", "Lunch Break"
-    SHORT_BREAK = "SHORT_BREAK", "Short Break"
-    PRAYER_BREAK = "PRAYER_BREAK", "Prayer Break"
-    MEETING = "MEETING", "Meeting"
-    LEAVING = "LEAVING", "Leaving for the Day"
-    OFFLINE = "OFFLINE", "Offline"
 
 
 class User(AbstractUser):
+    class Status(models.TextChoices):
+        AVAILABLE = "AVAILABLE", "Available"
+        LUNCH = "LUNCH", "Lunch Break"
+        SHORT_BREAK = "SHORT_BREAK", "Short Break"
+        PRAYER_BREAK = "PRAYER_BREAK", "Prayer Break"
+        MEETING = "MEETING", "Meeting"
+        LEAVING = "LEAVING", "Leaving for the Day"
+        OFFLINE = "OFFLINE", "Offline"
+
     phone = models.CharField(max_length=15, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -37,8 +38,8 @@ class User(AbstractUser):
 
     current_status = models.CharField(
         max_length=20,
-        choices=UserStatus.choices,
-        default=UserStatus.OFFLINE
+        choices=Status.choices,
+        default=Status.OFFLINE
     )
 
     status_updated_at = models.DateTimeField(auto_now=True)

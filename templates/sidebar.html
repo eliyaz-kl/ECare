@@ -52,6 +52,24 @@
         <div class="fw-bold text-truncate" style="font-size:14px;">
           {{ user.username }}
         </div>
+        <select id="userStatus"
+            data-status-url="{% url 'update-current-user-status' %}"
+
+            class="form-select form-select-sm mt-1">
+
+        {% for value, label in user.Status.choices %}
+
+            <option value="{{ value }}"
+
+                {% if user.current_status == value %}selected{% endif %}>
+
+                {{ label }}
+
+            </option>
+
+        {% endfor %}
+
+    </select>
         <div class="text-uppercase text-truncate" style="font-size:10px; letter-spacing:.08em; color:var(--text-muted);"> Contact Center Alpha </div>
       </div>
     </div>
