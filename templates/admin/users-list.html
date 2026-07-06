@@ -291,7 +291,7 @@
     const startTime = Date.now();
     const minLoadingTime = 800; // Minimum time to show skeleton loader (in ms)
 
-    fetch('/app/admin/api/users/')
+    fetch('/accounts/api/users/')
         .then(response => response.json())
         .then(data => {
             const elapsedTime = Date.now() - startTime;
@@ -322,7 +322,7 @@
 
     // View User Function
     function viewUser(userId) {
-        fetch(`/app/admin/api/users/${userId}/`)
+        fetch(`/accounts/api/users/${userId}/`)
             .then(response => response.json())
             .then(data => {
                 const content = `
@@ -370,7 +370,7 @@
     // Edit User Function
     function editUser(userId) {
         // Load groups first
-        fetch('/app/admin/api/groups/')
+        fetch('/accounts/api/groups/')
             .then(response => response.json())
             .then(groups => {
                 const groupSelect = document.getElementById('editGroup');
@@ -380,7 +380,7 @@
                 });
 
                 // Then load user data
-                return fetch(`/app/admin/api/users/${userId}/`);
+                return fetch(`/accounts/api/users/${userId}/`);
             })
             .then(response => response.json())
             .then(data => {
@@ -417,7 +417,7 @@
             password: document.getElementById('editPassword').value
         };
 
-        fetch(`/app/admin/api/users/${userId}/edit/`, {
+        fetch(`/accounts/api/users/${userId}/edit/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -431,7 +431,7 @@
                 Swal.fire('Success!', data.message, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
                 // Reload grid data
-                fetch('/app/admin/api/users/')
+                fetch('/accounts/api/users/')
                     .then(response => response.json())
                     .then(data => {
                         gridApi.setGridOption('rowData', data);
@@ -459,7 +459,7 @@
             cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/app/admin/api/users/${userId}/delete/`, {
+                fetch(`/accounts/api/users/${userId}/delete/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -471,7 +471,7 @@
                     if (data.success) {
                         Swal.fire('Deleted!', data.message, 'success');
                         // Reload grid data
-                        fetch('/app/admin/api/users/')
+                        fetch('/accounts/api/users/')
                             .then(response => response.json())
                             .then(data => {
                                 gridApi.setGridOption('rowData', data);
