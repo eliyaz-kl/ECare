@@ -251,6 +251,10 @@ def engagement_detail(request, pk):
     )
 
     if request.method == 'POST':
+        action = request.POST.get(
+            'action',
+            'reply'
+        )
 
         final_response = request.POST.get(
             'final_response',
@@ -270,9 +274,33 @@ def engagement_detail(request, pk):
                 content=final_response
             )
 
-            return redirect(
-                'engagement_detail',
+        if action == 'close':
+            engagement.status = 'CLOSED'
+            engagement.save(
+                update_fields=[
+                    'status',
+                    'updated_at',
+                ]
+            )
+
+        if final_response or action == 'close':
+            next_engagement = Engagement.objects.filter(
+                assigned_agent=request.user,
+                status='ASSIGNED'
+            ).exclude(
                 pk=engagement.pk
+            ).order_by(
+                'created_at'
+            ).first()
+
+            if next_engagement:
+                return redirect(
+                    'engagement_detail',
+                    pk=next_engagement.pk
+                )
+
+            return redirect(
+                'assigned'
             )
 
     messages = list(
