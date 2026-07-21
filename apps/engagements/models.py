@@ -129,3 +129,42 @@ class Engagement(models.Model):
 
     def __str__(self):
         return f"{self.customer.username} - {self.engagement_type}"
+
+
+class EngagementMessage(models.Model):
+
+    SENDER_CHOICES = [
+        ('CUSTOMER', 'Customer'),
+        ('AGENT', 'Agent'),
+        ('SYSTEM', 'System'),
+    ]
+
+    engagement = models.ForeignKey(
+        Engagement,
+        on_delete=models.CASCADE,
+        related_name='messages'
+    )
+
+    sender_type = models.CharField(
+        max_length=20,
+        choices=SENDER_CHOICES
+    )
+
+    agent = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
+    content = models.TextField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ['created_at', 'id']
+
+    def __str__(self):
+        return f"{self.engagement.request_number} - {self.sender_type}"

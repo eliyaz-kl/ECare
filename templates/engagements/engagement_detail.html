@@ -166,28 +166,44 @@
                         </div>
                         <div class="flex-grow-1 overflow-auto custom-scrollbar p-3 ">
                             <div class="d-flex flex-column gap-4" id="message-container">
-                                <!-- MESSAGE -->
-                                <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="fw-bold"> {{ engagement.customer.display_name|default:engagement.customer.username }} </span>
-                                        <span class="tiny-text text-muted-custom"> {{ engagement.created_at|date:"h:i A" }} </span>
+                                {% if conversation_messages %}
+                                    {% for message in conversation_messages %}
+                                        {% if message.sender_type == 'AGENT' %}
+                                            <!-- AGENT -->
+                                            <div class="d-flex flex-column gap-1 ms-auto align-items-end animated-message"
+                                                 style="max-width:90%;"{% if forloop.last %} id="agent-response-bubble"{% endif %}>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="tiny-text text-muted-custom"> {{ message.created_at|date:"h:i A" }} </span>
+                                                    <span class="fw-bold"> {% if message.agent %}{{ message.agent.get_full_name|default:message.agent.username }} (Agent){% else %}Agent{% endif %} </span>
+                                                </div>
+                                                <div class="message-bubble-agent p-3">
+                                                    <p class="mb-0"> {{ message.content }} </p>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <!-- CUSTOMER -->
+                                            <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="fw-bold"> {{ engagement.customer.display_name|default:engagement.customer.username }} </span>
+                                                    <span class="tiny-text text-muted-custom"> {{ message.created_at|date:"h:i A" }} </span>
+                                                </div>
+                                                <div class="message-bubble-user p-3">
+                                                    <p class="mb-0"> {{ message.content }} </p>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- CUSTOMER -->
+                                    <div class="d-flex flex-column gap-1 animated-message" style="max-width:90%;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="fw-bold"> {{ engagement.customer.display_name|default:engagement.customer.username }} </span>
+                                            <span class="tiny-text text-muted-custom"> {{ engagement.created_at|date:"h:i A" }} </span>
+                                        </div>
+                                        <div class="message-bubble-user p-3">
+                                            <p class="mb-0"> {{ engagement.content }} </p>
+                                        </div>
                                     </div>
-                                    <div class="message-bubble-user p-3">
-                                        <p class="mb-0"> {{ engagement.content }} </p>
-                                    </div>
-                                </div>
-                                {% if engagement.final_response %}
-                                <!-- AGENT -->
-                                <div class="d-flex flex-column gap-1 ms-auto align-items-end animated-message"
-                                     style="max-width:90%;" id="agent-response-bubble">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="tiny-text text-muted-custom"> {{ engagement.updated_at|date:"h:i A" }} </span>
-                                        <span class="fw-bold"> {% if engagement.assigned_agent %}{{ engagement.assigned_agent.get_full_name|default:engagement.assigned_agent.username }} (Agent){% else %}You (Agent){% endif %} </span>
-                                    </div>
-                                    <div class="message-bubble-agent p-3">
-                                        <p class="mb-0"> {{ engagement.final_response }} </p>
-                                    </div>
-                                </div>
                                 {% endif %}
                             </div>
 
@@ -225,8 +241,10 @@
                             </div>
 
                             <!-- EDITOR -->
-                            <form method="POST" class="d-contents">
+                            <form method="POST" class="d-contents" id="response-form">
                                 {% csrf_token %}
+                                <input type="hidden" name="final_response" id="final-response-input">
+
                                 <div class="flex-grow-1 d-flex flex-column px-3 pb-3">
                                     <!-- Include stylesheet -->
                                     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
@@ -413,6 +431,7 @@
 
 <!-- Include the Quill library -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<!-- Initialize Quill editor -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const messages = document.querySelectorAll('.animated-message');
@@ -421,51 +440,55 @@
                 msg.classList.add('show');
             }, index * 600); // 600ms delay between each message
         });
-    });
-</script>
-<!-- Initialize Quill editor -->
-<script>
-    const quill = new Quill('#editor', {
-      theme: 'snow'
-    });
 
-    // AI Suggestion Typing Animation
-    document.getElementById('ai-suggestion-trigger').addEventListener('click', function() {
-        const textElement = this.querySelector('.ai-response-text');
-        // Extract text, removing quotes if they exist at start/end
-        let fullText = textElement.innerText.trim();
-        if (fullText.startsWith('"') && fullText.endsWith('"')) {
-            fullText = fullText.substring(1, fullText.length - 1);
-        }
+        const quill = new Quill('#editor', {
+          theme: 'snow'
+        });
 
-        quill.setText(''); // Clear editor
-        
-        let i = 0;
-        function typeWriter() {
-            if (i < fullText.length) {
-                // Remove existing cursor if any
-                const delta = quill.getContents();
-                quill.insertText(i, fullText.charAt(i));
-                i++;
-                setTimeout(typeWriter, 30); // Adjust typing speed here
-            } else {
-                // Animation finished
+        const responseForm = document.getElementById('response-form');
+        const finalResponseInput = document.getElementById('final-response-input');
+
+        responseForm.addEventListener('submit', function() {
+            finalResponseInput.value = quill.getText().trim();
+        });
+
+        // AI Suggestion Typing Animation
+        document.getElementById('ai-suggestion-trigger').addEventListener('click', function() {
+            const textElement = this.querySelector('.ai-response-text');
+            // Extract text, removing quotes if they exist at start/end
+            let fullText = textElement.innerText.trim();
+            if (fullText.startsWith('"') && fullText.endsWith('"')) {
+                fullText = fullText.substring(1, fullText.length - 1);
             }
-        }
-        typeWriter();
-    });
 
-    // Approve & Send Animation
-    document.getElementById('approve-send-btn').addEventListener('click', function(e) {
-        const agentBubble = document.getElementById('agent-response-bubble');
-        if (agentBubble) {
-            agentBubble.classList.remove('show');
-            // Trigger animation after a short delay so it's visible if it was already shown 
-            // (though normally it would be shown on load)
-            setTimeout(() => {
-                agentBubble.classList.add('show');
-            }, 100);
-        }
+            quill.setText(''); // Clear editor
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < fullText.length) {
+                    // Remove existing cursor if any
+                    quill.insertText(i, fullText.charAt(i));
+                    i++;
+                    setTimeout(typeWriter, 30); // Adjust typing speed here
+                } else {
+                    // Animation finished
+                }
+            }
+            typeWriter();
+        });
+
+        // Approve & Send Animation
+        document.getElementById('approve-send-btn').addEventListener('click', function(e) {
+            const agentBubble = document.getElementById('agent-response-bubble');
+            if (agentBubble) {
+                agentBubble.classList.remove('show');
+                // Trigger animation after a short delay so it's visible if it was already shown 
+                // (though normally it would be shown on load)
+                setTimeout(() => {
+                    agentBubble.classList.add('show');
+                }, 100);
+            }
+        });
     });
 </script>
 {% endblock %}

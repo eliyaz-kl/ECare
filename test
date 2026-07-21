@@ -43,3 +43,11 @@ ecare/
 ├── static/
 ├── templates/
 └── manage.py
+
+customer engagement message
+
+EngagementMessage.objects.create(
+    engagement=engagement,
+    sender_type='CUSTOMER',
+    content=user_message,
+)

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from .models import Engagement
+from .models import Engagement, EngagementMessage
 # Create your views here.
 
 
@@ -136,7 +136,7 @@ def _render_engagement_grid(request, engagements, page_title, list_url_name):
         )
 
     engagements = engagements.order_by(
-        '-created_at'
+        'created_at'
     )
     per_page = _get_per_page(request)
     paginator = Paginator(engagements, per_page)
@@ -253,17 +253,39 @@ def engagement_detail(request, pk):
     if request.method == 'POST':
 
         final_response = request.POST.get(
-            'final_response'
+            'final_response',
+            ''
+        ).strip()
+
+        if final_response:
+            engagement.final_response = final_response
+            engagement.status = 'ASSIGNED'
+
+            engagement.save()
+
+            EngagementMessage.objects.create(
+                engagement=engagement,
+                sender_type='AGENT',
+                agent=request.user,
+                content=final_response
+            )
+
+            return redirect(
+                'engagement_detail',
+                pk=engagement.pk
+            )
+
+    messages = list(
+        engagement.messages.select_related(
+            'agent'
         )
-
-        engagement.final_response = final_response
-
-        engagement.save()
+    )
 
     return render(
         request,
         'engagements/engagement_detail.html',
         {
-            'engagement': engagement
+            'engagement': engagement,
+            'conversation_messages': messages,
         }
     )
