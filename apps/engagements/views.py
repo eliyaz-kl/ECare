@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -7,6 +8,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from .models import Engagement, EngagementMessage
+from .services import EngagementCategorizationError, categorize_engagement_with_llm
 # Create your views here.
 
 
@@ -315,5 +317,34 @@ def engagement_detail(request, pk):
         {
             'engagement': engagement,
             'conversation_messages': messages,
+        }
+    )
+
+
+@login_required
+def categorize_engagement(request, pk):
+    engagement = get_object_or_404(
+        Engagement,
+        pk=pk
+    )
+
+    try:
+        category = categorize_engagement_with_llm(engagement)
+    except EngagementCategorizationError as exc:
+        return JsonResponse(
+            {
+                'ok': False,
+                'engagement_id': engagement.id,
+                'error': str(exc),
+            },
+            status=502,
+        )
+
+    return JsonResponse(
+        {
+            'ok': True,
+            'engagement_id': engagement.id,
+            'request_number': engagement.request_number,
+            'category': category,
         }
     )

@@ -12,5 +12,7 @@ urlpatterns = [
 
     path('resolved/', views.resolved, name='resolved'),
 
+    path('api/engagements/<int:pk>/categorize/', views.categorize_engagement, name='categorize_engagement'),
+
     path('engagement/<int:pk>/', views.engagement_detail, name='engagement_detail'),
 ]
