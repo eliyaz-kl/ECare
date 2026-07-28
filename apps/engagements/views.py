@@ -8,7 +8,12 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from .models import Engagement, EngagementMessage
-from .services import EngagementCategorizationError, categorize_engagement_with_llm
+from .services import (
+    EngagementAutoReplyError,
+    EngagementCategorizationError,
+    auto_reply_engagement_with_llm,
+    categorize_engagement_with_llm,
+)
 # Create your views here.
 
 
@@ -245,6 +250,23 @@ def resolved(request):
 
 
 @login_required
+def auto_replies(request):
+    engagements = Engagement.objects.select_related(
+        'customer',
+        'assigned_agent'
+    ).filter(
+        is_auto_replied=True
+    )
+
+    return _render_engagement_grid(
+        request,
+        engagements,
+        'Auto Replied Request',
+        'auto_replies'
+    )
+
+
+@login_required
 def engagement_detail(request, pk):
 
     engagement = get_object_or_404(
@@ -340,11 +362,78 @@ def categorize_engagement(request, pk):
             status=502,
         )
 
+    auto_reply = None
+    try:
+        auto_reply = auto_reply_engagement_with_llm(engagement)
+    except EngagementAutoReplyError as exc:
+        engagement.status = 'AI_REVIEW'
+        engagement.save(update_fields=['status', 'updated_at'])
+        return JsonResponse(
+            {
+                'ok': False,
+                'engagement_id': engagement.id,
+                'request_number': engagement.request_number,
+                'category': category,
+                'auto_reply_failed': True,
+                'error': str(exc),
+            },
+            status=502,
+        )
+
     return JsonResponse(
         {
             'ok': True,
             'engagement_id': engagement.id,
             'request_number': engagement.request_number,
             'category': category,
+            'auto_replied': bool(auto_reply),
+            'reply': auto_reply,
+        }
+    )
+
+
+@login_required
+def auto_reply_engagement(request, pk):
+    engagement = get_object_or_404(
+        Engagement,
+        pk=pk
+    )
+
+    try:
+        reply = auto_reply_engagement_with_llm(engagement)
+    except EngagementAutoReplyError as exc:
+        engagement.status = 'AI_REVIEW'
+        engagement.save(update_fields=['status', 'updated_at'])
+        return JsonResponse(
+            {
+                'ok': False,
+                'engagement_id': engagement.id,
+                'request_number': engagement.request_number,
+                'auto_reply_failed': True,
+                'error': str(exc),
+            },
+            status=502,
+        )
+
+    if reply is None:
+        return JsonResponse(
+            {
+                'ok': False,
+                'engagement_id': engagement.id,
+                'request_number': engagement.request_number,
+                'category': engagement.category,
+                'error': 'This engagement category is not enabled for auto reply.',
+            },
+            status=400,
+        )
+
+    return JsonResponse(
+        {
+            'ok': True,
+            'engagement_id': engagement.id,
+            'request_number': engagement.request_number,
+            'category': engagement.category,
+            'auto_replied': True,
+            'reply': reply,
         }
     )

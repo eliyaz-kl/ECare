@@ -20,6 +20,7 @@ class Engagement(models.Model):
 
     STATUS_CHOICES = [
         ('NEW', 'New'),
+        ('AUTO_REPLY', 'Auto Reply'),
         ('AI_REVIEW', 'AI Review'),
         ('ASSIGNED', 'Assigned'),
         ('CLOSED', 'Closed'),
@@ -32,6 +33,7 @@ class Engagement(models.Model):
         ('Refund', 'Refund'),
         ('Technical Issue', 'Technical Issue'),
         ('Account Support', 'Account Support'),
+        ('Appreciation', 'Appreciation'),
         ('Complaint', 'Complaint'),
         ('General Inquiry', 'General Inquiry'),
     ]

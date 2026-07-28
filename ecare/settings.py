@@ -139,3 +139,8 @@ AUTH_USER_MODEL = 'accounts.User'
 LOCAL_LLM_CHAT_URL = os.getenv('LOCAL_LLM_CHAT_URL', 'http://localhost:11434/api/chat')
 LOCAL_LLM_MODEL = os.getenv('LOCAL_LLM_MODEL', 'mistral:latest')
 LOCAL_LLM_TIMEOUT = int(os.getenv('LOCAL_LLM_TIMEOUT', '30'))
+AUTO_REPLY_CATEGORIES = [
+    category.strip()
+    for category in os.getenv('AUTO_REPLY_CATEGORIES', 'Appreciation').split(',')
+    if category.strip()
+]
